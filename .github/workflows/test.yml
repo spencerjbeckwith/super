@@ -10,13 +10,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.1
       - uses: actions/setup-node@v4.0.4
-      - run: cd supersprite
-      - run: npm install
-      - run: npm run test
+      - run: |
+          cd supersprite
+          npm install
+          npm run test
         env:
           CI: true
-      - run: cd ../supersound
-      - run: npm install
-      - run: npm run test
+      - run: |
+          cd supersound
+          npm install
+          npm run test
         env:
           CI: true

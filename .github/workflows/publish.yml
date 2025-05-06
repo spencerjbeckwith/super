@@ -8,12 +8,14 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.package_name }}
     steps:
       - uses: actions/checkout@v4.2.1
       - uses: actions/setup-node@v4.0.4
         with:
           registry-url: "https://registry.npmjs.org"
-      - run: cd ${{ inputs.package_name }}
       - run: npm install
       - run: npm run test
       - run: npm run build
