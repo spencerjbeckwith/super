@@ -1,6 +1,6 @@
 {
   "name": "supersprite",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "sprite drawing engine for 2D games",
   "main": "dist/index.js",
   "bin": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spencerjbeckwith/supersprite.git"
+    "url": "git+https://github.com/spencerjbeckwith/super.git"
   },
   "author": "Spencer Beckwith",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/spencerjbeckwith/supersprite/issues"
+    "url": "https://github.com/spencerjbeckwith/super/issues"
   },
-  "homepage": "https://github.com/spencerjbeckwith/supersprite#readme",
+  "homepage": "https://github.com/spencerjbeckwith/super/supersprite#readme",
   "scripts": {
     "build": "tsc",
     "test": "cross-env TS_NODE_PROJECT=config/tsconfig.test.json mocha --config config/.mocharc.json",

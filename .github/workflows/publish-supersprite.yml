@@ -1,19 +1,13 @@
-name: Publish to NPM
+name: Publish supersprite to NPM
 on:
   push:
     branches:
       - main
+    paths:
+      - supersprite/**
   workflow_dispatch:
 jobs:
   publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.2.1
-      - uses: actions/setup-node@v4.0.4
-        with:
-          registry-url: "https://registry.npmjs.org"
-      - run: npm install
-      - run: npm run build
-      - run: npm publish
-        env:
-            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    uses: ./.github/workflows/publish.yml
+    with:
+      package_name: supersprite
