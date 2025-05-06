@@ -11,3 +11,4 @@ jobs:
     uses: ./.github/workflows/publish.yml
     with:
       package_name: supersprite
+    secrets: inherit
