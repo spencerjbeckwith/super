@@ -1,0 +1,22 @@
+{
+  "name": "supersound-example-webpack",
+  "version": "1.0.0",
+  "description": "Example using supersound with webpack",
+  "scripts": {
+    "build": "npx webpack",
+    "refresh": "cd ../.. && npm run build && cd examples/webpack && npm install ../.. && npm run build",
+    "serve": "npx serve"
+  },
+  "author": "Spencer Beckwith",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.4",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.6",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "supersound": "file:../.."
+  }
+}

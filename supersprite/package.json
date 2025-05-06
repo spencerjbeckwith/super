@@ -1,0 +1,61 @@
+{
+  "name": "supersprite",
+  "version": "3.0.1",
+  "description": "sprite drawing engine for 2D games",
+  "main": "dist/index.js",
+  "bin": {
+    "supersprite": "dist/atlas/bin.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spencerjbeckwith/supersprite.git"
+  },
+  "author": "Spencer Beckwith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spencerjbeckwith/supersprite/issues"
+  },
+  "homepage": "https://github.com/spencerjbeckwith/supersprite#readme",
+  "scripts": {
+    "build": "tsc",
+    "test": "cross-env TS_NODE_PROJECT=config/tsconfig.test.json mocha --config config/.mocharc.json",
+    "coverage": "nyc npm run test"
+  },
+  "keywords": [
+    "supersprite",
+    "sprites",
+    "primitives",
+    "webgl",
+    "webgl2",
+    "rendering",
+    "shaders",
+    "atlas",
+    "game"
+  ],
+  "dependencies": {
+    "commander": "^13.1.0",
+    "jimp": "^0.22.12"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^22.5.4",
+    "@types/sinon": "^17.0.3",
+    "cross-env": "^7.0.3",
+    "expect": "^29.7.0",
+    "gifwrap": "^0.10.1",
+    "global-jsdom": "^24.0.0",
+    "mocha": "^10.7.0",
+    "nyc": "^17.0.0",
+    "sinon": "^18.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.4",
+    "webgl-mock": "github:spencerjbeckwith/webgl-mock"
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.spec.ts",
+      "src/shaders/**.ts"
+    ]
+  }
+}

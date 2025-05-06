@@ -1,0 +1,12 @@
+{
+  "extension": [
+    "ts"
+  ],
+  "spec": "src/**/*.spec.ts",
+  "require": [
+    "ts-node/register",
+    "global-jsdom/register",
+    "config/stubs/WebAudioAPI",
+    "mocha-suppress-logs"
+  ]
+}

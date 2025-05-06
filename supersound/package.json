@@ -1,0 +1,48 @@
+{
+  "name": "supersound",
+  "version": "1.0.0",
+  "description": "audio engine for browser games",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spencerjbeckwith/supersound.git"
+  },
+  "author": "Spencer Beckwith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spencerjbeckwith/supersound/issues"
+  },
+  "homepage": "https://github.com/spencerjbeckwith/supersound#readme",
+  "scripts": {
+    "build": "tsc",
+    "test": "cross-env TS_NODE_PROJECT=config/tsconfig.test.json mocha --config config/.mocharc.json",
+    "coverage": "nyc npm run test"
+  },
+  "keywords": [
+    "supersound",
+    "sound",
+    "audio",
+    "game"
+  ],
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.14.0",
+    "@types/sinon": "^17.0.4",
+    "cross-env": "^7.0.3",
+    "expect": "^29.7.0",
+    "global-jsdom": "^26.0.0",
+    "mocha": "^11.1.0",
+    "mocha-suppress-logs": "^0.5.1",
+    "nyc": "^17.1.0",
+    "sinon": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.spec.ts",
+      "config/*"
+    ]
+  }
+}
