@@ -30,20 +30,6 @@ describe("Input", () => {
         }).toThrow(InputError);
     });
 
-    it("throws if not initialized with register()", () => {
-        class TestInputNoRegister extends Input<""> {
-            getInitialValue() {
-                return false;
-            }
-            getActiveValue(input: "") {
-                return true;
-            }
-        }
-        expect(() => {
-            new TestInputNoRegister([""]);
-        }).toThrow(InputError);
-    });
-
     it("initializes all inputs to the initial value", () => {
         const i = new TestInput(["one", "two", "three"]);
         expect(i.pressed.one).toBe(false);

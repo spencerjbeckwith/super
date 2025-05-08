@@ -27,10 +27,13 @@ export class InputError extends Error {};
  * 3. Override the `getActiveValue()` method. This sets the idle state for every input to a value considered active by the chosen `InputData` type,
  * which is the expected state when the class is first initialized.
  * 
- * 3. Override the `register()` method. This is called once for every `InputIdentifier` provided when initializing the class.
+ * 3. (Optional) Override the `register()` method. This is called once for every `InputIdentifier` provided when initializing the class.
  * This is the method that is expected to add event listeners to the window or document that should update the `pressed`, `held`, `released`,
  * and `idle` properties for each input. For example, a keyboard input class may add keydown and keyup event listeners, while a mouse input class
  * may add mousemove, mousedown, and mouseup event listeners.
+ * 
+ * The `register()` method is optional in a subclass if all event listeners for the inputs are identical - in this case, add the necessary event listener(s)
+ * in the subclass constructor.
  * 
  * 4. If necessary, override the `update()` method. This method is responsible for updating the state of each input, such as moving inputs from the pressed
  * state into the held state. This behavior may not be necessary for all types of input. Also note that this lifecycle, by default, assumes that an input
@@ -104,10 +107,8 @@ export class Input<InputIdentifier extends string, InputData = boolean> {
         throw new InputError("Input subclasses must define getInitialValue(), getActiveValue(), and register().")
     }
 
-    /** Registers all event listeners or callbacks that actually update the states of each input. Must be overridden in child classes. */
-    register(input: InputIdentifier) {
-        throw new InputError("Input subclasses must define getInitialValue(), getActiveValue(), and register().")
-    }
+    /** Registers all event listeners or callbacks that actually update the states of each input. May be overridden in child classes if the provided `input` must be handled differently in each listener. */
+    register(input: InputIdentifier) {}
 
     /** Resets all states of the provided input, except for the one provided. This should be used by subclasses to help keep the state valid. */
     resetExcept(keep: "pressed" | "held" | "released" | "idle", input: InputIdentifier) {
