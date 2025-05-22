@@ -99,12 +99,12 @@ export class Input<InputIdentifier extends string, InputData = boolean> {
 
     /** Returns the initial `InputData` value that should be set to all states of all inputs (except idle) by default. Must be overridden in child classes. */
     getInitialValue(input: InputIdentifier): InputData {
-        throw new InputError("Input subclasses must define getInitialValue(), getActiveValue(), and register().")
+        throw new InputError("Input subclasses must define getInitialValue() and getActiveValue().")
     }
 
     /** Returns the initial active `InputData` value that is set to the idle state of all inputs. Must be overridden in child classes. */
     getActiveValue(input: InputIdentifier): InputData {
-        throw new InputError("Input subclasses must define getInitialValue(), getActiveValue(), and register().")
+        throw new InputError("Input subclasses must define getInitialValue() and getActiveValue().")
     }
 
     /** Registers all event listeners or callbacks that actually update the states of each input. May be overridden in child classes if the provided `input` must be handled differently in each listener. */

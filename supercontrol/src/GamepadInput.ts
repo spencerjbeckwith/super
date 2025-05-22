@@ -133,6 +133,14 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
         }
     }
 
+    getActiveValue(input: GamepadButtons) {
+        return true;
+    }
+
+    getInitialValue(input: GamepadButtons) {
+        return false;
+    }
+
     /** 
      * A convenience method to obtain the current value of a gamepad axis, accounting for the dead zone.
      * 
@@ -143,7 +151,7 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
         const axisIndex = Number(stick === "right") * 2 + Number(axis === "y");
 
         // Don't allow checking on axes that might not exist
-        if (axisIndex <= this.gamepad.axes.length) return 0;
+        if (axisIndex >= this.gamepad.axes.length) return 0;
 
         const axisValue = this.gamepad.axes[axisIndex];
         if (Math.abs(axisValue) < this.axisDeadZone) {
@@ -187,7 +195,7 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
                         this.idle[input] = false;
                         this.pressed[input] = true;
                     }
-                    if (this.held[input] && Math.abs(axisValue) < this.axisPressThreshold && sign == Math.sign(axisValue)) {
+                    if (this.held[input] && Math.abs(axisValue) < this.axisPressThreshold && (sign == Math.sign(axisValue) || axisValue === 0)) {
                         this.held[input] = false;
                         this.released[input] = true;
                     }
