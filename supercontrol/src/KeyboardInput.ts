@@ -8,6 +8,9 @@ import { Input } from "./Input";
  */
 export class KeyboardInput<InputIdentifier extends string> extends Input<InputIdentifier> {
 
+    // TODO: How can we improve this class so mapping is possible? The InputIdentifier generic is too specific to allow us to
+    // simply call register() again, but re-initializing a new KeyboardInput doesn't remove the old listeners without a cleanup function.
+
     getInitialValue(input: InputIdentifier): boolean {
         return false;
     }
