@@ -24,3 +24,4 @@ TODO supercontrol readme
 - Add mapping capability to UnifiedInput's getter functions
 - Input deinitializers
 - TouchInput class
+- Change MouseInput buttons to be more descriptive and differentiate them in UnifiedInput, e.g. "left" -> "leftMouseButton"

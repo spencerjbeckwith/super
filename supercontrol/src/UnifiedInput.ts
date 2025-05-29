@@ -27,7 +27,7 @@ export class UnifiedInput<KeyboardKeys extends string> {
     /** Access point for more advanced gamepad input, such as checking triggers or gamepad connection status */
     gamepad: GamepadInput;
 
-    constructor(keyboardKeys: KeyboardKeys[] = [], mouseReferenceFrame?: HTMLElement, gamepadAxisPressThreshold?: number, gamepadAxisDeadZone?: number) {
+    constructor(keyboardKeys: KeyboardKeys[], mouseReferenceFrame?: HTMLElement, gamepadAxisPressThreshold?: number, gamepadAxisDeadZone?: number) {
         this.keyboard = new KeyboardInput(keyboardKeys);
         this.mouse = new MouseInput(mouseReferenceFrame);
         this.gamepad = new GamepadInput(gamepadAxisPressThreshold, gamepadAxisDeadZone);
