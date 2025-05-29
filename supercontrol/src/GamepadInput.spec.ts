@@ -171,7 +171,7 @@ describe("GamepadInput", () => {
         expect(g.getAxis("left", "y")).toBeCloseTo(Math.sqrt(0.5));
     });
 
-    it("updates trigger values", () => {
+    it("updates trigger values on button trigger mode", () => {
         const gamepad: Partial<Gamepad> = {
             axes: [0, 0, 0, 0],
             buttons: makeButtonArray(),
@@ -184,5 +184,45 @@ describe("GamepadInput", () => {
         g.update();
         expect(g.leftTrigger).toBe(0.66);
         expect(g.rightTrigger).toBe(0.77);
+    });
+
+    it("updates trigger values on axis trigger mode", () => {
+        const gamepad: Partial<Gamepad> = {
+            axes: [0, 0, 0, 0, 0, 0],
+            buttons: makeButtonArray(),
+        }
+        const g = initGamepad(gamepad);
+        // @ts-ignore
+        gamepad.axes[4] = 0.66;
+        // @ts-ignore
+        gamepad.axes[5] = 0.77;
+        g.update();
+        expect(g.leftTrigger).toBe(0.66);
+        expect(g.rightTrigger).toBe(0.77);
+    });
+
+    it("transitions trigger button states correctly on axis trigger mode", () => {
+        const gamepad: Partial<Gamepad> = {
+            axes: [0, 0, 0, 0, 0, 0],
+            buttons: makeButtonArray(),
+        }
+        const g = initGamepad(gamepad);
+        g.update();
+        expect(g.pressed.leftTrigger).toBe(false);
+        // @ts-ignore
+        gamepad.axes![4] = 1;
+        g.update();
+        expect(g.pressed.leftTrigger).toBe(true);
+        g.update();
+        expect(g.pressed.leftTrigger).toBe(false);
+        expect(g.held.leftTrigger).toBe(true);
+        // @ts-ignore
+        gamepad.axes![4] = -1;
+        g.update();
+        expect(g.held.leftTrigger).toBe(false);
+        expect(g.released.leftTrigger).toBe(true);
+        g.update();
+        expect(g.released.leftTrigger).toBe(false);
+        expect(g.idle.leftTrigger).toBe(true);
     });
 });

@@ -55,6 +55,14 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
     /** The threshold that must be passed for directional axis "presses" */
     axisPressThreshold: number;
 
+    /** 
+     * The threshold that must be passed for a trigger to count as a "press". This only applies with "axis" `triggerMode`.
+     * 
+     * Note that axis triggers rest at -1 by default, though this may possibly be different depending on the gamepad
+     * and the browser.
+     */
+    triggerPressThreshold: number;
+
     /** The deadzone within which an axis value should be counted as zero */
     axisDeadZone: number;
 
@@ -67,7 +75,13 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
     /** If the values of each axis pair should be normalized to a length of 1.0 to simulate only circular values. Defaults to true. */
     clampAxes: boolean;
 
-    constructor(axisPressThreshold = 0.35, axisDeadZone = 0.1, clampAxes = true) {
+    /**
+     * Indicates if the gamepad's triggers are handled as buttons or axes. This is detected based on the number of axes available on the
+     * gamepad, but your mileage may vary based on the control layout and browser.
+    */
+    triggerMode: "button" | "axis" | null;
+
+    constructor(axisPressThreshold = 0.35, axisDeadZone = 0.1, clampAxes = true, triggerPressThreshold = 0) {
         super([
             "button0",
             "button1",
@@ -102,6 +116,9 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
         this.leftTrigger = 0;
         this.rightTrigger = 0;
         this.clampAxes = clampAxes;
+        this.triggerPressThreshold = triggerPressThreshold;
+
+        this.triggerMode = null;
         this.reset();
         window.addEventListener("gamepadconnected", (event) => {
             this.set(event.gamepad);
@@ -122,6 +139,7 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
             this.released[input] = false;
             this.idle[input] = true;
         }
+        this.triggerMode = this.gamepad.axes.length === 6 ? "axis" : "button";
     }
 
     /** Uninitializes the gamepad and sets all states to null. */
@@ -135,6 +153,7 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
             this.released[input] = null;
             this.idle[input] = null;
         }
+        this.triggerMode = null;
     }
 
     getActiveValue(input: GamepadButtons) {
@@ -189,6 +208,21 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
             for (let i = 0; i < this.inputs.length; i++) {
                 const input = this.inputs[i];
                 if (i < 17) {
+                    // If we are using axes as our trigger mode, handle button indices 6 and 7 differently (as these correspond to the triggers).
+                    if (this.triggerMode === "axis" && (i === 6 || i === 7)) {
+                        const axisIndex = i - 2;
+                        const axisValue = this.gamepad.axes[axisIndex];
+                        if (this.idle[input] && axisValue >= this.axisPressThreshold) {
+                            this.idle[input] = false;
+                            this.pressed[input] = true;
+                        }
+                        if (this.held[input] && axisValue < this.axisPressThreshold) {
+                            this.held[input] = false;
+                            this.released[input] = true;
+                        }
+                        continue;
+                    }
+
                     // For first 17 inputs, query gamepad button to see if we should set it as pressed
                     if (this.idle[input] && this.gamepad.buttons[i].pressed) {
                         this.idle[input] = false;
@@ -222,9 +256,15 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
                 }
             }
 
-            // Update triggers (using value instead of pressed)
-            this.leftTrigger = this.gamepad.buttons[6].value;
-            this.rightTrigger = this.gamepad.buttons[7].value;
+            if (this.triggerMode === "button") {
+                // Update triggers (using value instead of pressed)
+                this.leftTrigger = this.gamepad.buttons[6].value;
+                this.rightTrigger = this.gamepad.buttons[7].value;
+            } else {
+                // In axis trigger mode, set directly from the axes' values
+                this.leftTrigger = this.gamepad.axes[4];
+                this.rightTrigger = this.gamepad.axes[5];
+            }
         }
     }
 }

@@ -37,6 +37,7 @@ function main() {
         <p>Axis Right Y: ${Math.trunc(i.gamepad.getAxis("right", "y") * 100) / 100}</p>
         <p>Left Trigger: ${Math.trunc(i.gamepad.leftTrigger * 100) / 100}</p>
         <p>Right Trigger: ${Math.trunc(i.gamepad.rightTrigger * 100) / 100}</p>
+        <p>Trigger Mode: ${i.gamepad.triggerMode}</p>
     </div>`;
 
     // Mouse

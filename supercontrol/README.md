@@ -15,7 +15,7 @@ TODO supercontrol readme
 
 ## To-do
 
-- Triggers as axes mode for GamepadInput
+- Add webpack example
 - Finish writing README
 - Convert input initializations into options objects instead of constructor arguments
 - Move this section to github issues
