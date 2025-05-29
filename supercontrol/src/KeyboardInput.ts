@@ -21,14 +21,14 @@ export class KeyboardInput<InputIdentifier extends string> extends Input<InputId
 
     register(input: InputIdentifier) {
         window.addEventListener("keydown", (event) => {
-            if (event.key.toLowerCase() === input) {
+            if (event.key.toLowerCase() === input.toLowerCase()) {
                 this.pressed[input] = true;
                 this.resetExcept("pressed", input);
             }
         });
 
         window.addEventListener("keyup", (event) => {
-            if (event.key.toLowerCase() === input) {
+            if (event.key.toLowerCase() === input.toLowerCase()) {
                 this.released[input] = true;
                 this.resetExcept("released", input);
             }
