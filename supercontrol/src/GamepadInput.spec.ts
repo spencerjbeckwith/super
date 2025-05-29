@@ -157,6 +157,20 @@ describe("GamepadInput", () => {
         expect(g.released.leftAxisLeft).toBe(true);
     });
 
+    it("clamps axes to 1 length", () => {
+        const gamepad: Partial<Gamepad> = {
+            axes: [0, 0, 0, 0],
+            buttons: makeButtonArray(),
+        }
+        const g = initGamepad(gamepad);
+        // @ts-ignore
+        gamepad.axes![0] = 1;
+        // @ts-ignore
+        gamepad.axes![1] = 1;
+        expect(g.getAxis("left", "x")).toBeCloseTo(Math.sqrt(0.5));
+        expect(g.getAxis("left", "y")).toBeCloseTo(Math.sqrt(0.5));
+    });
+
     it("updates trigger values", () => {
         const gamepad: Partial<Gamepad> = {
             axes: [0, 0, 0, 0],

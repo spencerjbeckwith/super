@@ -16,8 +16,8 @@ TODO supercontrol readme
 ## To-do
 
 - Triggers as axes mode for GamepadInput
-- Add joystick clamping mode
 - Finish writing README
+- Convert input initializations into options objects instead of constructor arguments
 - Move this section to github issues
 - Type enforcement on keyboard key names
     - This would remove the need for a keyboard keys generic.

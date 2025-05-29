@@ -52,19 +52,22 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
     /** The raw gamepad object from the browser. Set to null if no gamepad is connected. */
     gamepad: Gamepad | null;
 
-    /** The threshold that must be passed for directional axis "presses". */
+    /** The threshold that must be passed for directional axis "presses" */
     axisPressThreshold: number;
 
-    /** The deadzone within which an axis value should be counted as zero. */
+    /** The deadzone within which an axis value should be counted as zero */
     axisDeadZone: number;
 
-    /** The current value of the left trigger of the gamepad, or 0 if none is connected. */
+    /** The current value of the left trigger of the gamepad, or 0 if none is connected */
     leftTrigger: number;
 
-    /** The current value of the right trigger of the gamepad, or 0 if none is connected. */
+    /** The current value of the right trigger of the gamepad, or 0 if none is connected */
     rightTrigger: number;
 
-    constructor(axisPressThreshold = 0.35, axisDeadZone = 0.1) {
+    /** If the values of each axis pair should be normalized to a length of 1.0 to simulate only circular values. Defaults to true. */
+    clampAxes: boolean;
+
+    constructor(axisPressThreshold = 0.35, axisDeadZone = 0.1, clampAxes = true) {
         super([
             "button0",
             "button1",
@@ -98,6 +101,7 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
         this.axisDeadZone = axisDeadZone;
         this.leftTrigger = 0;
         this.rightTrigger = 0;
+        this.clampAxes = clampAxes;
         this.reset();
         window.addEventListener("gamepadconnected", (event) => {
             this.set(event.gamepad);
@@ -157,6 +161,20 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
         if (Math.abs(axisValue) < this.axisDeadZone) {
             return 0;
         }
+
+        if (this.clampAxes) {
+            // To clamp to one length, we need to get the length of our other axis as well.
+            const otherAxisIndex = Number(stick === "right") * 2 + Number(axis !== "y");
+            const otherAxisValue = this.gamepad.axes[otherAxisIndex];
+            if (Math.abs(otherAxisValue) >= this.axisDeadZone) {
+                // Whichever axis is X or Y doesn't really matter at this point.
+                const magnitude = Math.sqrt(axisValue * axisValue + otherAxisValue * otherAxisValue);
+                if (magnitude > 1) {
+                    return (axisValue / magnitude);
+                }
+            }
+        }
+
         return axisValue;
     }
 
