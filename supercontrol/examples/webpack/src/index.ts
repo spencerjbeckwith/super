@@ -1,6 +1,6 @@
 import { UnifiedInput } from "supercontrol";
 
-const i = new UnifiedInput(["ArrowLeft", "ArrowRight", "ArrowDown", "ArrowUp"]);
+const i = new UnifiedInput();
 const ex = document.getElementById("example");
 
 const activated: string[] = [];
@@ -44,7 +44,7 @@ function main() {
     ex.innerHTML += getInputStateHTML("MouseInput", ["left", "right"]);
 
     // Keyboard
-    ex.innerHTML += getInputStateHTML("KeyboardInput", ["ArrowLeft", "ArrowRight", "ArrowDown", "ArrowUp"]);
+    ex.innerHTML += getInputStateHTML("KeyboardInput", ["KeyArrowLeft", "KeyArrowRight", "KeyArrowDown", "KeyArrowUp"]);
 
     // Gamepad
     ex.innerHTML += getInputStateHTML("Gamepad Buttons", [

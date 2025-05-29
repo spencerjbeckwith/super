@@ -7,7 +7,7 @@ export type MouseButtons = "left" | "wheel" | "right" | "back" | "forward";
 export interface MouseInputOptions {
 
     /** The HTML element intended to be the target of mouse events */
-    referenceFrame: HTMLElement;
+    referenceFrame?: HTMLElement;
 }
 
 /** Input class that tracks mouse movement, button, and wheel events. */
