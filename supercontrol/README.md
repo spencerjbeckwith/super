@@ -15,9 +15,4 @@ TODO supercontrol readme
 
 ## To-do
 
-- How do we handle repeat keys?
-- Remove initial/inactive value parent functions. Needless complexity since no child classes use them.
 - Finish writing README
-- Move this section to github issues
-- Add mapping capability to UnifiedInput's getter functions
-- TouchInput class

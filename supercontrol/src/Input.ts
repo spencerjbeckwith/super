@@ -13,21 +13,14 @@ export class InputError extends Error {};
  * Ideally, every input should only be in one of these states at a time. This is determined by the event listeners that should be assigned by
  * an overridden `register()` method, and updated every frame via the `update()` method.
  * 
- * Subclassing this requires a few important steps:
+ * A few important things about subclassing `Input`:
  * 
  * 1. The `InputIdentifier` type generic should be set to a union of strings to use as your identifiers.
  * These become the different keys of the `held`, `idle`, etc. properties and allow autocomplete to know what inputs you care about,
  * instead of using an index signature that wouldn't catch if an input is forgotten and misspelled.
  * Depending on the inputs you want to watch, you may use something like `"down" | "right" | "up" | "left"`.
  * 
- * 2. Override the `getInitialValue()` method. The second generic to this class, `InputData`, indicates the type that should be stored
- * by each state of each `InputIdentifier`. Typically this would be a simple boolean, though for mouse, touch, or other types of complex input,
- * an object could be used here to store an X and Y coordinate, or a union with `null`, for example.
- * 
- * 3. Override the `getActiveValue()` method. This sets the idle state for every input to a value considered active by the chosen `InputData` type,
- * which is the expected state when the class is first initialized.
- * 
- * 3. (Optional) Override the `register()` method. This is called once for every `InputIdentifier` provided when initializing the class.
+ * 2. (Optional) Override the `register()` method. This is called once for every `InputIdentifier` provided when initializing the class.
  * This is the method that is expected to add event listeners to the window or document that should update the `pressed`, `held`, `released`,
  * and `idle` properties for each input. For example, a keyboard input class may add keydown and keyup event listeners, while a mouse input class
  * may add mousemove, mousedown, and mouseup event listeners.
@@ -35,9 +28,8 @@ export class InputError extends Error {};
  * The `register()` method is optional in a subclass if all event listeners for the inputs are identical - in this case, add the necessary event listener(s)
  * in the subclass constructor.
  * 
- * 4. If necessary, override the `update()` method. This method is responsible for updating the state of each input, such as moving inputs from the pressed
- * state into the held state. This behavior may not be necessary for all types of input. Also note that this lifecycle, by default, assumes that an input
- * is "active" if the `InputData` value is truthy.
+ * 3. If necessary, override the `update()` method. This method is responsible for updating the state of each input, such as moving inputs from the pressed
+ * state into the held state. This behavior may not be necessary for all types of input.
  * 
  * When using an Input subclass, ensure that the `update()` method is called at the end of every frame to ensure the proper state lifecycle takes place.
  */
@@ -47,37 +39,37 @@ export class InputError extends Error {};
 // - Add a deregister method to clean everything up
 // - Find a way to "cache" the initial value so that resetting to initial values doesn't become too costly
 
-export class Input<InputIdentifier extends string, InputData = boolean> {
+export class Input<InputIdentifier extends string> {
 
     /** Record of all `InputIdentifier`s with their current pressed state. This state lasts for one frame. */
-    pressed: Record<InputIdentifier, InputData>;
+    pressed: Record<InputIdentifier, boolean>;
 
     /**
      * Record of all `InputIdentifier`s with their current held state. This state may persist for as long as the input is held.
      * 
      * Some situations, such as clicking out of a webpage, may leave this state active until the input is pressed again.
      */
-    held: Record<InputIdentifier, InputData>;
+    held: Record<InputIdentifier, boolean>;
 
     /** Record of all `InputIdentifier`s with their current released state. This state lasts for one frame. */
-    released: Record<InputIdentifier, InputData>;
+    released: Record<InputIdentifier, boolean>;
 
     /** 
      * Record of all `InputIdentifier`s with their current idle state. This state lasts until the input is activated again. 
      * 
      * Note that the idle state may remain uninitialized until an input has been activated at least once, unless a subclass explicitly initializes it.
     */
-    idle: Record<InputIdentifier, InputData>;
+    idle: Record<InputIdentifier, boolean>;
 
     /** Array of all identifiers used by this instance */
     inputs: InputIdentifier[];
 
     constructor(inputs: InputIdentifier[]) {
         this.inputs = inputs;
-        this.pressed = {} as Record<InputIdentifier, InputData>;
-        this.held = {} as Record<InputIdentifier, InputData>;
-        this.released = {} as Record<InputIdentifier, InputData>;
-        this.idle = {} as Record<InputIdentifier, InputData>;
+        this.pressed = {} as Record<InputIdentifier, boolean>;
+        this.held = {} as Record<InputIdentifier, boolean>;
+        this.released = {} as Record<InputIdentifier, boolean>;
+        this.idle = {} as Record<InputIdentifier, boolean>;
 
         this.#initializeState("pressed");
         this.#initializeState("held");
@@ -92,19 +84,9 @@ export class Input<InputIdentifier extends string, InputData = boolean> {
     /** Initializes the provided state with the input's initial value */
     #initializeState(state: "pressed" | "held" | "released" | "idle", active = false) {
         this[state] = this.inputs.reduce((previous, current) => {
-            previous[current] = active ? this.getActiveValue(current) : this.getInitialValue(current);
+            previous[current] = active;
             return previous;
-        }, {} as Record<InputIdentifier, InputData>);
-    }
-
-    /** Returns the initial `InputData` value that should be set to all states of all inputs (except idle) by default. Must be overridden in child classes. */
-    getInitialValue(input: InputIdentifier): InputData {
-        throw new InputError("Input subclasses must define getInitialValue() and getActiveValue().")
-    }
-
-    /** Returns the initial active `InputData` value that is set to the idle state of all inputs. Must be overridden in child classes. */
-    getActiveValue(input: InputIdentifier): InputData {
-        throw new InputError("Input subclasses must define getInitialValue() and getActiveValue().")
+        }, {} as Record<InputIdentifier, boolean>);
     }
 
     /** Registers all event listeners or callbacks that actually update the states of each input. May be overridden in child classes if the provided `input` must be handled differently in each listener. */
@@ -114,7 +96,7 @@ export class Input<InputIdentifier extends string, InputData = boolean> {
     resetExcept(keep: "pressed" | "held" | "released" | "idle", input: InputIdentifier) {
         for (const state of ["pressed", "held", "released", "idle"] as const) {
             if (state !== keep) {
-                this[state][input] = this.getInitialValue(input);
+                this[state][input] = false;
             }
         }
     }

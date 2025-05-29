@@ -19,6 +19,7 @@ describe("KeyboardInput", () => {
         expect(k.released.keyA).toBe(false);
         pressKey("a");
         expect(k.released.keyA).toBe(false);
+        k.update(); // Have to move key from pressed into idle before it can be released
         releaseKey("a");
         expect(k.released.keyA).toBe(true);
     });
@@ -39,6 +40,7 @@ describe("KeyboardInput", () => {
     it("updates released to idle state on update()", () => {
         const k = new KeyboardInput();
         pressKey("a");
+        k.update();
         releaseKey("a");
         expect(k.released.keyA).toBe(true);
         expect(k.idle.keyA).toBe(false);

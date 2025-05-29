@@ -68,7 +68,7 @@ export interface GamepadInputOptions {
  * they may need to disconnect the gamepads they don't want to use. This also means local multiplayer using gamepads isn't currently supported by this class.
  * - This is only compatible with the "standard" layout mapping, as described [in the w3 spec](https://www.w3.org/TR/gamepad/#remapping).
  */
-export class GamepadInput extends Input<GamepadButtons, boolean | null> {
+export class GamepadInput extends Input<GamepadButtons> {
 
     /** The raw gamepad object from the browser. Set to null if no gamepad is connected. */
     gamepad: Gamepad | null;
@@ -169,20 +169,12 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
         this.leftTrigger = 0;
         this.rightTrigger = 0;
         for (const input of this.inputs) {
-            this.pressed[input] = null;
-            this.held[input] = null;
-            this.released[input] = null;
-            this.idle[input] = null;
+            this.pressed[input] = false;
+            this.held[input] = false;
+            this.released[input] = false;
+            this.idle[input] = false;
         }
         this.triggerMode = null;
-    }
-
-    getActiveValue(input: GamepadButtons) {
-        return true;
-    }
-
-    getInitialValue(input: GamepadButtons) {
-        return false;
     }
 
     /** 

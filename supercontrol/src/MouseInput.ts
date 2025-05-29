@@ -102,14 +102,6 @@ export class MouseInput extends Input<MouseButtons> {
         });
     }
 
-    getInitialValue(input: MouseButtons): boolean {
-        return false;
-    }
-
-    getActiveValue(input: MouseButtons): boolean {
-        return true;
-    }
-
     update() {
         super.update();
 

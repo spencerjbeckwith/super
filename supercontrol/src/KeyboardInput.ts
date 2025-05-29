@@ -32,7 +32,7 @@ export class KeyboardInput<K extends readonly string[] = Keys[]> extends Input<K
                 if (expectedInput === "Space") {
                     expectedInput = " "; // Correct our special handling of the space bar
                 }
-                if (event.key.toLowerCase() === expectedInput.toLowerCase()) {
+                if (event.key.toLowerCase() === expectedInput.toLowerCase() && this.idle[input]) {
                     this.pressed[input] = true;
                     this.resetExcept("pressed", input);
                 }
@@ -47,19 +47,11 @@ export class KeyboardInput<K extends readonly string[] = Keys[]> extends Input<K
                 if (expectedInput === "Space") {
                     expectedInput = " ";
                 }
-                if (event.key.toLowerCase() === expectedInput.toLowerCase()) {
+                if (event.key.toLowerCase() === expectedInput.toLowerCase() && this.held[input]) {
                     this.released[input] = true;
                     this.resetExcept("released", input);
                 }
             }
         });
-    }
-
-    getInitialValue(input: typeof keys[number]): boolean {
-        return false;
-    }
-
-    getActiveValue(input: typeof keys[number]): boolean {
-        return true;
     }
 }
