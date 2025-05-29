@@ -19,11 +19,11 @@ describe("MouseInput", () => {
         document.body.dispatchEvent(new MouseEvent("mousedown", {
             button: 2,
         }));
-        expect(m.pressed.right).toBe(true);
+        expect(m.pressed.mouseRight).toBe(true);
         document.body.dispatchEvent(new MouseEvent("mouseup", {
             button: 0,
         }));
-        expect(m.released.left).toBe(true);
+        expect(m.released.mouseLeft).toBe(true);
     });
     
     it("updates mouse X and Y position according to referenceFrame", () => {

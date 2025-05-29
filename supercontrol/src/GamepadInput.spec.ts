@@ -88,22 +88,22 @@ describe("GamepadInput", () => {
         }
         const g = initGamepad(gamepad);
         g.update();
-        expect(g.pressed.button0).toBe(false);
+        expect(g.pressed.gpButton0).toBe(false);
         // @ts-ignore
         gamepad.buttons![0].pressed = true;
         g.update();
-        expect(g.pressed.button0).toBe(true);
+        expect(g.pressed.gpButton0).toBe(true);
         g.update();
-        expect(g.pressed.button0).toBe(false);
-        expect(g.held.button0).toBe(true);
+        expect(g.pressed.gpButton0).toBe(false);
+        expect(g.held.gpButton0).toBe(true);
         // @ts-ignore
         gamepad.buttons![0].pressed = false;
         g.update();
-        expect(g.held.button0).toBe(false);
-        expect(g.released.button0).toBe(true);
+        expect(g.held.gpButton0).toBe(false);
+        expect(g.released.gpButton0).toBe(true);
         g.update();
-        expect(g.released.button0).toBe(false);
-        expect(g.idle.button0).toBe(true);
+        expect(g.released.gpButton0).toBe(false);
+        expect(g.idle.gpButton0).toBe(true);
     });
 
     it("transitions axis press states correctly", () => {
@@ -115,18 +115,18 @@ describe("GamepadInput", () => {
         // @ts-ignore
         gamepad.axes![0] = -1;
         g.update();
-        expect(g.pressed.leftAxisLeft).toBe(true);
+        expect(g.pressed.gpLeftAxisLeft).toBe(true);
         g.update();
-        expect(g.pressed.leftAxisLeft).toBe(false);
-        expect(g.held.leftAxisLeft).toBe(true);
+        expect(g.pressed.gpLeftAxisLeft).toBe(false);
+        expect(g.held.gpLeftAxisLeft).toBe(true);
         // @ts-ignore
         gamepad.axes![0] = 0;
         g.update();
-        expect(g.held.leftAxisLeft).toBe(false);
-        expect(g.released.leftAxisLeft).toBe(true);
+        expect(g.held.gpLeftAxisLeft).toBe(false);
+        expect(g.released.gpLeftAxisLeft).toBe(true);
         g.update();
-        expect(g.released.leftAxisLeft).toBe(false);
-        expect(g.idle.leftAxisLeft).toBe(true);
+        expect(g.released.gpLeftAxisLeft).toBe(false);
+        expect(g.idle.gpLeftAxisLeft).toBe(true);
     });
 
     it("doesn't transition axis press states on axes that don't exist", () => {
@@ -136,7 +136,7 @@ describe("GamepadInput", () => {
         }
         const g = initGamepad(gamepad);
         g.update();
-        expect(g.pressed.rightAxisLeft).toBe(false);
+        expect(g.pressed.gpRightAxisLeft).toBe(false);
     });
 
     it("unsets held states on axes that bounce across zero when released", () => {
@@ -149,12 +149,12 @@ describe("GamepadInput", () => {
         gamepad.axes![0] = -1;
         g.update();
         g.update();
-        expect(g.held.leftAxisLeft).toBe(true);
+        expect(g.held.gpLeftAxisLeft).toBe(true);
         // @ts-ignore
         gamepad.axes![0] = 0.5;
         g.update();
-        expect(g.held.leftAxisLeft).toBe(false);
-        expect(g.released.leftAxisLeft).toBe(true);
+        expect(g.held.gpLeftAxisLeft).toBe(false);
+        expect(g.released.gpLeftAxisLeft).toBe(true);
     });
 
     it("clamps axes to 1 length", () => {
@@ -208,21 +208,21 @@ describe("GamepadInput", () => {
         }
         const g = initGamepad(gamepad);
         g.update();
-        expect(g.pressed.leftTrigger).toBe(false);
+        expect(g.pressed.gpLeftTrigger).toBe(false);
         // @ts-ignore
         gamepad.axes![4] = 1;
         g.update();
-        expect(g.pressed.leftTrigger).toBe(true);
+        expect(g.pressed.gpLeftTrigger).toBe(true);
         g.update();
-        expect(g.pressed.leftTrigger).toBe(false);
-        expect(g.held.leftTrigger).toBe(true);
+        expect(g.pressed.gpLeftTrigger).toBe(false);
+        expect(g.held.gpLeftTrigger).toBe(true);
         // @ts-ignore
         gamepad.axes![4] = -1;
         g.update();
-        expect(g.held.leftTrigger).toBe(false);
-        expect(g.released.leftTrigger).toBe(true);
+        expect(g.held.gpLeftTrigger).toBe(false);
+        expect(g.released.gpLeftTrigger).toBe(true);
         g.update();
-        expect(g.released.leftTrigger).toBe(false);
-        expect(g.idle.leftTrigger).toBe(true);
+        expect(g.released.gpLeftTrigger).toBe(false);
+        expect(g.idle.gpLeftTrigger).toBe(true);
     });
 });

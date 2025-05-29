@@ -1,31 +1,31 @@
 import { Input } from "./Input";
 
 export type GamepadButtons =
-    "button0" |
-    "button1" |
-    "button2" |
-    "button3" |
-    "leftBumper" |
-    "rightBumper" |
-    "leftTrigger" |
-    "rightTrigger" |
-    "select" |
-    "start" |
-    "leftJoystick" |
-    "rightJoystick" |
-    "dpadUp" |
-    "dpadLeft" |
-    "dpadRight" |
-    "dpadDown" |
-    "center" |
-    "leftAxisLeft" |
-    "leftAxisRight" |
-    "leftAxisUp" | 
-    "leftAxisDown" |
-    "rightAxisLeft" | 
-    "rightAxisRight" |
-    "rightAxisUp" | 
-    "rightAxisDown";
+    "gpButton0" |
+    "gpButton1" |
+    "gpButton2" |
+    "gpButton3" |
+    "gpLeftBumper" |
+    "gpRightBumper" |
+    "gpLeftTrigger" |
+    "gpRightTrigger" |
+    "gpSelect" |
+    "gpStart" |
+    "gpLeftJoystick" |
+    "gpRightJoystick" |
+    "gpDPadUp" |
+    "gpDPadLeft" |
+    "gpDPadRight" |
+    "gpDPadDown" |
+    "gpCenter" |
+    "gpLeftAxisLeft" |
+    "gpLeftAxisRight" |
+    "gpLeftAxisUp" | 
+    "gpLeftAxisDown" |
+    "gpRightAxisLeft" | 
+    "gpRightAxisRight" |
+    "gpRightAxisUp" | 
+    "gpRightAxisDown";
 // Reference for button indices: https://www.w3.org/TR/gamepad/#remapping
 
 /** Options object provided when initialzing GamepadInput */
@@ -104,31 +104,31 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
 
     constructor(options?: GamepadInputOptions) {
         super([
-            "button0",
-            "button1",
-            "button2",
-            "button3",
-            "leftBumper",
-            "rightBumper",
-            "leftTrigger",
-            "rightTrigger",
-            "select",
-            "start",
-            "leftJoystick",
-            "rightJoystick",
-            "dpadUp",
-            "dpadLeft",
-            "dpadRight",
-            "dpadDown",
-            "center",
-            "leftAxisLeft",
-            "leftAxisRight",
-            "leftAxisUp",
-            "leftAxisDown",
-            "rightAxisLeft",
-            "rightAxisRight",
-            "rightAxisUp",
-            "rightAxisDown",
+            "gpButton0",
+            "gpButton1",
+            "gpButton2",
+            "gpButton3",
+            "gpLeftBumper",
+            "gpRightBumper",
+            "gpLeftTrigger",
+            "gpRightTrigger",
+            "gpSelect",
+            "gpStart",
+            "gpLeftJoystick",
+            "gpRightJoystick",
+            "gpDPadUp",
+            "gpDPadLeft",
+            "gpDPadRight",
+            "gpDPadDown",
+            "gpCenter",
+            "gpLeftAxisLeft",
+            "gpLeftAxisRight",
+            "gpLeftAxisUp",
+            "gpLeftAxisDown",
+            "gpRightAxisLeft",
+            "gpRightAxisRight",
+            "gpRightAxisUp",
+            "gpRightAxisDown",
         ]);
 
         this.gamepad = null;

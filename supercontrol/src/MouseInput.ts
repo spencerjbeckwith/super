@@ -1,7 +1,7 @@
 import { Input } from "./Input";
 
 /** Union type of mouse buttons recognized by the browser */
-export type MouseButtons = "left" | "wheel" | "right" | "back" | "forward";
+export type MouseButtons = "mouseLeft" | "mouseWheel" | "mouseRight" | "mouseBack" | "mouseForward";
 
 /** Options object provided when initialzing MouseInput */
 export interface MouseInputOptions {
@@ -54,7 +54,7 @@ export class MouseInput extends Input<MouseButtons> {
     wheelDeltaZ: number;
 
     constructor(options?: MouseInputOptions) {
-        super(["left", "wheel", "right", "back", "forward"]);
+        super(["mouseLeft", "mouseWheel", "mouseRight", "mouseBack", "mouseForward"]);
         this.referenceFrame = options?.referenceFrame ?? document.body;
         this.referenceFrameScale = {
             x: 1,

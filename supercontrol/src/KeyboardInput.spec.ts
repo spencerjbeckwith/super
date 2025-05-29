@@ -9,43 +9,43 @@ describe("KeyboardInput", () => {
 
     it("sets the pressed state for keys", () => {
         const k = new KeyboardInput();
-        expect(k.pressed.KeyA).toBe(false);
+        expect(k.pressed.keyA).toBe(false);
         pressKey("a");
-        expect(k.pressed.KeyA).toBe(true);
+        expect(k.pressed.keyA).toBe(true);
     });
     
     it("sets the released state for keys", () => {
         const k = new KeyboardInput();
-        expect(k.released.KeyA).toBe(false);
+        expect(k.released.keyA).toBe(false);
         pressKey("a");
-        expect(k.released.KeyA).toBe(false);
+        expect(k.released.keyA).toBe(false);
         releaseKey("a");
-        expect(k.released.KeyA).toBe(true);
+        expect(k.released.keyA).toBe(true);
     });
 
     it("updates pressed to held state on update()", () => {
         const k = new KeyboardInput();
         pressKey("a");
-        expect(k.held.KeyA).toBe(false);
+        expect(k.held.keyA).toBe(false);
         k.update();
-        expect(k.pressed.KeyA).toBe(false);
-        expect(k.held.KeyA).toBe(true);
+        expect(k.pressed.keyA).toBe(false);
+        expect(k.held.keyA).toBe(true);
         k.update();
-        expect(k.held.KeyA).toBe(true);
+        expect(k.held.keyA).toBe(true);
         releaseKey("a");
-        expect(k.held.KeyA).toBe(false);
+        expect(k.held.keyA).toBe(false);
     });
 
     it("updates released to idle state on update()", () => {
         const k = new KeyboardInput();
         pressKey("a");
         releaseKey("a");
-        expect(k.released.KeyA).toBe(true);
-        expect(k.idle.KeyA).toBe(false);
+        expect(k.released.keyA).toBe(true);
+        expect(k.idle.keyA).toBe(false);
         k.update();
-        expect(k.released.KeyA).toBe(false);
-        expect(k.idle.KeyA).toBe(true);
+        expect(k.released.keyA).toBe(false);
+        expect(k.idle.keyA).toBe(true);
         k.update();
-        expect(k.idle.KeyA).toBe(true);
+        expect(k.idle.keyA).toBe(true);
     });
 });

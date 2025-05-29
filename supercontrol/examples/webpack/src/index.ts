@@ -41,38 +41,38 @@ function main() {
     </div>`;
 
     // Mouse
-    ex.innerHTML += getInputStateHTML("MouseInput", ["left", "right"]);
+    ex.innerHTML += getInputStateHTML("MouseInput", ["mouseLeft", "mouseRight"]);
 
     // Keyboard
-    ex.innerHTML += getInputStateHTML("KeyboardInput", ["KeyArrowLeft", "KeyArrowRight", "KeyArrowDown", "KeyArrowUp"]);
+    ex.innerHTML += getInputStateHTML("KeyboardInput", ["keyArrowLeft", "keyArrowRight", "keyArrowDown", "keyArrowUp"]);
 
     // Gamepad
     ex.innerHTML += getInputStateHTML("Gamepad Buttons", [
-        "button0",
-        "button1",
-        "button2",
-        "button3",
+        "gpButton0",
+        "gpButton1",
+        "gpButton2",
+        "gpButton3",
     ]);
 
     ex.innerHTML += getInputStateHTML("Gamepad Buttons", [
-        "leftBumper",
-        "rightBumper",
-        "leftTrigger",
-        "rightTrigger",
+        "gpLeftBumper",
+        "gpRightBumper",
+        "gpLeftTrigger",
+        "gpRightTrigger",
     ]);
 
     ex.innerHTML += getInputStateHTML("Gamepad Left Axis", [
-        "leftAxisLeft",
-        "leftAxisRight",
-        "leftAxisDown",
-        "leftAxisUp",
+        "gpLeftAxisLeft",
+        "gpLeftAxisRight",
+        "gpLeftAxisDown",
+        "gpLeftAxisUp",
     ]);
 
     ex.innerHTML += getInputStateHTML("Gamepad Right Axis", [
-        "rightAxisLeft",
-        "rightAxisRight",
-        "rightAxisDown",
-        "rightAxisUp",
+        "gpRightAxisLeft",
+        "gpRightAxisRight",
+        "gpRightAxisDown",
+        "gpRightAxisUp",
     ]);
 
     i.update(); // Important to call this every frame!

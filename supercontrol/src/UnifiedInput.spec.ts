@@ -7,10 +7,10 @@ describe("UnifiedInput", () => {
     it("returns the correct merged object for all states", () => {
         // Yeah, UI should certainly not be our usual abbreviation for this class...
         const ui = new UnifiedInput();
-        expect(ui.pressed.KeyShift).not.toBeUndefined();
-        expect(ui.held.left).not.toBeUndefined();
-        expect(ui.released.dpadDown).not.toBeUndefined();
-        expect(ui.idle.KeyShift).not.toBeUndefined();
+        expect(ui.pressed.keyShift).not.toBeUndefined();
+        expect(ui.held.mouseLeft).not.toBeUndefined();
+        expect(ui.released.gpDPadDown).not.toBeUndefined();
+        expect(ui.idle.keyShift).not.toBeUndefined();
     });
 
     it("updates KeyboardInput, MouseInput, and GamepadInput on update()", () => {
@@ -26,17 +26,17 @@ describe("UnifiedInput", () => {
     
     it("returns if any input is in the state on anyOf()", () => {
         const ui = new UnifiedInput();
-        ui.mouse.held["left"] = true;
-        expect(ui.anyOf("held", ["right", "back", "forward"])).toBe(false);
-        expect(ui.anyOf("held", ["right", "left", "back"])).toBe(true);
+        ui.mouse.held["mouseLeft"] = true;
+        expect(ui.anyOf("held", ["mouseRight", "mouseBack", "mouseForward"])).toBe(false);
+        expect(ui.anyOf("held", ["mouseRight", "mouseLeft", "mouseBack"])).toBe(true);
     });
     
     it("returns if all inputs are in the state on allOf()", () => {
         const ui = new UnifiedInput();
-        ui.mouse.held["left"] = true;
-        ui.mouse.held["right"] = true;
-        expect(ui.allOf("held", ["left", "right", "back"])).toBe(false);
-        expect(ui.allOf("held", ["left", "right"])).toBe(true);
+        ui.mouse.held["mouseLeft"] = true;
+        ui.mouse.held["mouseRight"] = true;
+        expect(ui.allOf("held", ["mouseLeft", "mouseRight", "mouseBack"])).toBe(false);
+        expect(ui.allOf("held", ["mouseLeft", "mouseRight"])).toBe(true);
     });
 
     // TODO: tests on mappings

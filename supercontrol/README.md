@@ -15,7 +15,6 @@ TODO supercontrol readme
 
 ## To-do
 
-- Change MouseInput buttons to be more descriptive and differentiate them in UnifiedInput, e.g. "left" -> "leftMouseButton"
 - How do we handle repeat keys?
 - Remove initial/inactive value parent functions. Needless complexity since no child classes use them.
 - Finish writing README
