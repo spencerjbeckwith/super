@@ -191,11 +191,13 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
                     if (axisIndex >= this.gamepad.axes.length) continue;
 
                     const axisValue = this.gamepad.axes[axisIndex];
-                    if (this.idle[input] && Math.abs(axisValue) >= this.axisPressThreshold && sign == Math.sign(axisValue)) {
+                    if (this.idle[input] && Math.abs(axisValue) >= this.axisPressThreshold && sign === Math.sign(axisValue)) {
                         this.idle[input] = false;
                         this.pressed[input] = true;
                     }
-                    if (this.held[input] && Math.abs(axisValue) < this.axisPressThreshold && (sign == Math.sign(axisValue) || axisValue === 0)) {
+                    if (this.held[input] && ((Math.abs(axisValue) < this.axisPressThreshold && (sign === Math.sign(axisValue) || axisValue === 0)) || (sign === -1 * Math.sign(axisValue)))) {
+                        // unset if the axis value is on the opposite side of zero than where it is expected
+                        // how do we express this in terms of the sign of axisValue?
                         this.held[input] = false;
                         this.released[input] = true;
                     }

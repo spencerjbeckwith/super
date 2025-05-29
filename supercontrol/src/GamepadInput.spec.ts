@@ -139,6 +139,24 @@ describe("GamepadInput", () => {
         expect(g.pressed.rightAxisLeft).toBe(false);
     });
 
+    it("unsets held states on axes that bounce across zero when released", () => {
+        const gamepad: Partial<Gamepad> = {
+            axes: [0, 0],
+            buttons: makeButtonArray(),
+        }
+        const g = initGamepad(gamepad);
+        // @ts-ignore
+        gamepad.axes![0] = -1;
+        g.update();
+        g.update();
+        expect(g.held.leftAxisLeft).toBe(true);
+        // @ts-ignore
+        gamepad.axes![0] = 0.5;
+        g.update();
+        expect(g.held.leftAxisLeft).toBe(false);
+        expect(g.released.leftAxisLeft).toBe(true);
+    });
+
     it("updates trigger values", () => {
         const gamepad: Partial<Gamepad> = {
             axes: [0, 0, 0, 0],
