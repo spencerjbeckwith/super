@@ -28,6 +28,27 @@ export type GamepadButtons =
     "rightAxisDown";
 // Reference for button indices: https://www.w3.org/TR/gamepad/#remapping
 
+/** Options object provided when initialzing GamepadInput */
+export interface GamepadInputOptions {
+
+    /** The threshold that must be passed for directional axis "presses" to register. Defaults to 0.35. */
+    axisPressThreshold?: number;
+
+    /** The deadzone within which an axis value should be counted as zero. Defaults to 0.1. */
+    axisDeadZone?: number;
+
+    /** If the values of each axis pair should be normalized to a length of 1.0 to simulate only circular values. Defaults to true. */
+    clampAxes?: boolean;
+
+    /** 
+     * The threshold that must be passed for a trigger to count as a "press". This only applies with "axis" `triggerMode`.
+     * 
+     * Note that axis triggers rest at -1 by default, though this may possibly be different depending on the gamepad
+     * and the browser. Defaults to 0.
+     */
+    triggerPressThreshold?: number;
+}
+
 /**
  * Input class that tracks a gamepad, if one is connected to the browser. Gamepads are assumed to have two joysticks, two triggers, two bumpers, a D-pad,
  * four face buttons, start, select, and a central button - the "standard" layout.
@@ -52,19 +73,22 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
     /** The raw gamepad object from the browser. Set to null if no gamepad is connected. */
     gamepad: Gamepad | null;
 
-    /** The threshold that must be passed for directional axis "presses" */
+    /** The threshold that must be passed for directional axis "presses" to register. Defaults to 0.35. */
     axisPressThreshold: number;
+    
+    /** The deadzone within which an axis value should be counted as zero. Defaults to 0.1. */
+    axisDeadZone: number;
+
+    /** If the values of each axis pair should be normalized to a length of 1.0 to simulate only circular values. Defaults to true. */
+    clampAxes: boolean;
 
     /** 
      * The threshold that must be passed for a trigger to count as a "press". This only applies with "axis" `triggerMode`.
      * 
      * Note that axis triggers rest at -1 by default, though this may possibly be different depending on the gamepad
-     * and the browser.
+     * and the browser. Defaults to 0.
      */
     triggerPressThreshold: number;
-
-    /** The deadzone within which an axis value should be counted as zero */
-    axisDeadZone: number;
 
     /** The current value of the left trigger of the gamepad, or 0 if none is connected */
     leftTrigger: number;
@@ -72,16 +96,13 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
     /** The current value of the right trigger of the gamepad, or 0 if none is connected */
     rightTrigger: number;
 
-    /** If the values of each axis pair should be normalized to a length of 1.0 to simulate only circular values. Defaults to true. */
-    clampAxes: boolean;
-
     /**
      * Indicates if the gamepad's triggers are handled as buttons or axes. This is detected based on the number of axes available on the
      * gamepad, but your mileage may vary based on the control layout and browser.
     */
     triggerMode: "button" | "axis" | null;
 
-    constructor(axisPressThreshold = 0.35, axisDeadZone = 0.1, clampAxes = true, triggerPressThreshold = 0) {
+    constructor(options?: GamepadInputOptions) {
         super([
             "button0",
             "button1",
@@ -111,12 +132,12 @@ export class GamepadInput extends Input<GamepadButtons, boolean | null> {
         ]);
 
         this.gamepad = null;
-        this.axisPressThreshold = axisPressThreshold;
-        this.axisDeadZone = axisDeadZone;
+        this.axisPressThreshold = options?.axisPressThreshold ?? 0.35;
+        this.axisDeadZone = options?.axisDeadZone ?? 0.1;
         this.leftTrigger = 0;
         this.rightTrigger = 0;
-        this.clampAxes = clampAxes;
-        this.triggerPressThreshold = triggerPressThreshold;
+        this.clampAxes = options?.clampAxes ?? true;
+        this.triggerPressThreshold = options?.triggerPressThreshold ?? 0;
 
         this.triggerMode = null;
         this.reset();

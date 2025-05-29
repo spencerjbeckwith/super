@@ -3,6 +3,13 @@ import { Input } from "./Input";
 /** Union type of mouse buttons recognized by the browser */
 export type MouseButtons = "left" | "wheel" | "right" | "back" | "forward";
 
+/** Options object provided when initialzing MouseInput */
+export interface MouseInputOptions {
+
+    /** The HTML element intended to be the target of mouse events */
+    referenceFrame: HTMLElement;
+}
+
 /** Input class that tracks mouse movement, button, and wheel events. */
 export class MouseInput extends Input<MouseButtons> {
 
@@ -46,9 +53,9 @@ export class MouseInput extends Input<MouseButtons> {
     /** Change on the Z-axis applied to the mouse wheel since the last frame, if supported by the mouse */
     wheelDeltaZ: number;
 
-    constructor(referenceFrame?: HTMLElement) {
+    constructor(options?: MouseInputOptions) {
         super(["left", "wheel", "right", "back", "forward"]);
-        this.referenceFrame = referenceFrame ?? document.body;
+        this.referenceFrame = options?.referenceFrame ?? document.body;
         this.referenceFrameScale = {
             x: 1,
             y: 1,

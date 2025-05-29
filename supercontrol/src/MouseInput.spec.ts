@@ -29,7 +29,7 @@ describe("MouseInput", () => {
     it("updates mouse X and Y position according to referenceFrame", () => {
         const div = document.createElement("div");
         document.body.appendChild(div);
-        const m = new MouseInput(div);
+        const m = new MouseInput({ referenceFrame: div });
         document.body.dispatchEvent(new MouseEvent("mousemove", {
             clientX: 10,
             clientY: 15,
@@ -86,7 +86,7 @@ describe("MouseInput", () => {
 
     it("suppresses context menu events", () => {
         const div = document.createElement("div");
-        new MouseInput(div);
+        new MouseInput({ referenceFrame: div });
         const ev = new MouseEvent("contextmenu");
         const spy = sinon.spy(ev, "preventDefault");
         div.dispatchEvent(ev);

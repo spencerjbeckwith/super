@@ -1,6 +1,6 @@
 import { KeyboardInput } from "./KeyboardInput";
-import { MouseInput } from "./MouseInput";
-import { GamepadInput } from "./GamepadInput";
+import { MouseInput, MouseInputOptions } from "./MouseInput";
+import { GamepadInput, GamepadInputOptions } from "./GamepadInput";
 
 /** Utility type that describes the keys of each input state on UnifiedInput. */
 type InputStates<KeyboardKeys extends string> = {
@@ -27,10 +27,10 @@ export class UnifiedInput<KeyboardKeys extends string> {
     /** Access point for more advanced gamepad input, such as checking triggers or gamepad connection status */
     gamepad: GamepadInput;
 
-    constructor(keyboardKeys: KeyboardKeys[], mouseReferenceFrame?: HTMLElement, gamepadAxisPressThreshold?: number, gamepadAxisDeadZone?: number) {
+    constructor(keyboardKeys: KeyboardKeys[], options?: MouseInputOptions & GamepadInputOptions) {
         this.keyboard = new KeyboardInput(keyboardKeys);
-        this.mouse = new MouseInput(mouseReferenceFrame);
-        this.gamepad = new GamepadInput(gamepadAxisPressThreshold, gamepadAxisDeadZone);
+        this.mouse = new MouseInput(options);
+        this.gamepad = new GamepadInput(options);
     }
 
     /** Checks the pressed state for keyboard, mouse, and gamepad input */

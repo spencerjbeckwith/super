@@ -15,7 +15,6 @@ TODO supercontrol readme
 
 ## To-do
 
-- Convert input initializations into options objects instead of constructor arguments
 - Finish writing README
 - Move this section to github issues
 - Type enforcement on keyboard key names
