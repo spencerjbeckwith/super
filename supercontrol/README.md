@@ -15,6 +15,9 @@ TODO supercontrol readme
 
 ## To-do
 
+- Fix bug where left trigger and right trigger not activated
+- Fix bug with axis presses not releasing sometimes
+- Finish writing README
 - Move this section to github issues
 - Type enforcement on keyboard key names
     - This would remove the need for a keyboard keys generic.

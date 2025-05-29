@@ -73,7 +73,7 @@ export class UnifiedInput<KeyboardKeys extends string> {
         };
     }
 
-    /** Must be called every frame to update the underlying inputs */
+    /** Must be called *at the end* of every frame to update the underlying inputs */
     update() {
         this.keyboard.update();
         this.mouse.update();

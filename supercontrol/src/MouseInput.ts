@@ -91,7 +91,7 @@ export class MouseInput extends Input<MouseButtons> {
 
         // Remove context menu interaction
         this.referenceFrame.addEventListener("contextmenu", (event) => {
-            event.stopImmediatePropagation();
+            event.preventDefault();
         });
     }
 

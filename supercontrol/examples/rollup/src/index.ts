@@ -17,7 +17,7 @@ function getInputStateHTML(heading: string, inputs: string[]) {
             if (val && !pastActive) {
                 activated.push(state + "-" + input);
             }
-            ret += `<p ${pastActive ? "class=\"pastactive\"" : (val ? "class=\"active\"" : "")}>${input} ${state}: ${val}</p>`;
+            ret += `<p ${val ? "class=\"active\"" : (pastActive ? "class=\"pastactive\"" : "")}>${input} ${state}: ${val}</p>`;
         }
     }
     ret += "</div>";
@@ -25,7 +25,7 @@ function getInputStateHTML(heading: string, inputs: string[]) {
 }
 
 function main() {
-    i.update(); // Important to call this every frame!
+    
 
     ex.innerHTML = `<div>
         <p>Mouse X: ${i.mouse.x}</p>
@@ -74,6 +74,7 @@ function main() {
         "rightAxisUp",
     ]);
 
+    i.update(); // Important to call this every frame!
     requestAnimationFrame(main);
 }
 

@@ -1,5 +1,6 @@
 import { MouseInput } from "./MouseInput";
 import expect from "expect";
+import sinon from "sinon";
 
 describe("MouseInput", () => {
 
@@ -86,12 +87,10 @@ describe("MouseInput", () => {
     it("suppresses context menu events", () => {
         const div = document.createElement("div");
         new MouseInput(div);
-        let called = false;
-        div.addEventListener("contextmenu", () => {
-            called = true;
-        });
-        div.dispatchEvent(new MouseEvent("contextmenu"));
-        expect(called).toBe(false);
+        const ev = new MouseEvent("contextmenu");
+        const spy = sinon.spy(ev, "preventDefault");
+        div.dispatchEvent(ev);
+        expect(spy.called).toBe(true);
     });
 
     it("returns true on isIn() when mouse is in rectangle", () => {
