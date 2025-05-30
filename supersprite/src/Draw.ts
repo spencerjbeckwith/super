@@ -224,7 +224,7 @@ export class Draw {
     /** Draws an image from a sprite at (`x`, `y`). */
     sprite(sprite: Sprite, image: number, x: number, y: number, transform?: Transform, blend?: Color) {
         this.gl.bindVertexArray(this.shader.vao);
-        this.spriteSpecial(sprite, image, x, y, 6, transform, blend);
+        this.spriteSpecial(sprite, image, Math.round(x), Math.round(y), 6, transform, blend);
         this.gl.bindVertexArray(null);
     }
 
@@ -251,7 +251,7 @@ export class Draw {
         this.gl.uniformMatrix3fv(this.shader.uniforms.positionMatrix, false, this.projectionMatrix);
 
         // Set transformations
-        const t = new Transform().translate(x, y).scale(sprite.width, sprite.height);
+        const t = new Transform().translate(Math.round(x), Math.round(y)).scale(sprite.width, sprite.height);
         if (transform) {
             t.append(transform);
         }
