@@ -1,6 +1,6 @@
-# supercontrol
+# supercontroller
 
-supercontrol is a user-input engine for browser-based games or other applications. Plug and play!
+supercontroller is a user-input engine for browser-based games or other applications. Plug and play!
 
 ## Capabilities
 
@@ -10,14 +10,14 @@ supercontrol is a user-input engine for browser-based games or other application
 
 ## Usage
 
-In order to use supercontrol you must also be using a tool such as [rollup](https://rollupjs.org/guide/en/) or [webpack](https://v4.webpack.js.org/) that can pull in code from node dependencies and run it in the browser. See the `examples` directory for example configurations.
+In order to use supercontroller you must also be using a tool such as [rollup](https://rollupjs.org/guide/en/) or [webpack](https://v4.webpack.js.org/) that can pull in code from node dependencies and run it in the browser. See the `examples` directory for example configurations.
 
-> ```npm install supercontrol```
+> ```npm install supercontroller```
 
 The simplest way to get started is to instantiate `UnifiedInput`.
 
 ```typescript
-import { UnifiedInput } from "supercontrol";
+import { UnifiedInput } from "supercontroller";
 
 const input = new UnifiedInput();
 ```
@@ -76,7 +76,7 @@ In this example, the code block will execute if any of the left arrow key, gamep
 
 ### Virtual Buttons
 
-There are eight virtual gamepad buttons that supercontrol tracks - they are the four cardinal directions on the gamepad left and right joysticks.
+There are eight virtual gamepad buttons that supercontroller tracks - they are the four cardinal directions on the gamepad left and right joysticks.
 
 These are useful for `anyOf()` as described above and for situations where checking the specific magnitude of the axis doesn't matter, such as navigating menus.
 
@@ -109,7 +109,7 @@ All keys specified this way must be prefixed with the word "key". This conventio
 
 #### Gamepad Triggers
 
-Triggers on a connected gamepad may be represented as buttons or as axes, depending on the specific make of the gamepad and the browser it is connected to. To try and cover more cases, supercontrol has "button" and "axis" trigger modes on `GamepadInput`. This is set automatically.
+Triggers on a connected gamepad may be represented as buttons or as axes, depending on the specific make of the gamepad and the browser it is connected to. To try and cover more cases, supercontroller has "button" and "axis" trigger modes on `GamepadInput`. This is set automatically.
 
 Trigger values in "button" mode are treated very similarly to every other gamepad button, except they use the `value` instead of `pressed` key of the `GamepadButton` provided by the browser.
 
@@ -120,6 +120,6 @@ Trigger values in "axis" mode are treated very similarly to the regular axes. Th
 - Only one gamepad may be connected at a time
 - No support for touch input
 - No support for virtual reality gamepad mappings
-- Specific gamepad layouts may not be compatible with supercontrol. This is inevitable given how many varieties and manufacturers there are and that there's no meaningful standard. There are a few options to remedy this:
-    - Open a GitHub issue about the layout, ideally containing specifics about why the layout is broken and how it might be assessed by supercontrol. Even better, open a PR!
+- Specific gamepad layouts may not be compatible with supercontroller. This is inevitable given how many varieties and manufacturers there are and that there's no meaningful standard. There are a few options to remedy this:
+    - Open a GitHub issue about the layout, ideally containing specifics about why the layout is broken and how it might be assessed by supercontroller. Even better, open a PR!
     - Find software to virtually map the gamepad inputs to a more friendly layout.

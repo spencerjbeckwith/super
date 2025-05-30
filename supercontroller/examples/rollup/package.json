@@ -1,7 +1,7 @@
 {
-  "name": "supercontrol-example-rollup",
+  "name": "supercontroller-example-rollup",
   "version": "1.0.0",
-  "description": "Example using supercontrol with rollup",
+  "description": "Example using supercontroller with rollup",
   "private": true,
   "scripts": {
     "build": "npx rollup -c rollup.config.js",
@@ -18,6 +18,6 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "supercontrol": "file:../.."
+    "supercontroller": "file:../.."
   }
 }

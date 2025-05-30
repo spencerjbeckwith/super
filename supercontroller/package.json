@@ -1,5 +1,5 @@
 {
-    "name": "supercontrol",
+    "name": "supercontroller",
     "version": "1.0.0",
     "description": "input engine for browser games",
     "main": "dist/index.js",
@@ -12,14 +12,14 @@
     "bugs": {
       "url": "https://github.com/spencerjbeckwith/super/issues"
     },
-    "homepage": "https://github.com/spencerjbeckwith/super/supercontrol#readme",
+    "homepage": "https://github.com/spencerjbeckwith/super/supercontroller#readme",
     "scripts": {
       "build": "tsc",
       "test": "cross-env TS_NODE_PROJECT=config/tsconfig.test.json mocha --config config/.mocharc.json",
       "coverage": "nyc npm run test"
     },
     "keywords": [
-      "supercontrol",
+      "supercontroller",
       "control",
       "input",
       "game"

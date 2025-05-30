@@ -12,7 +12,7 @@ module.exports = {
     resolve: {
         extensions: [".ts", ".js", ".json"],
         alias: {
-            "supercontrol": path.resolve(__dirname, "../../dist"),
+            "supercontroller": path.resolve(__dirname, "../../dist"),
         },
     },
     output: {

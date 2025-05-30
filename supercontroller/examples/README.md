@@ -1,4 +1,4 @@
-# supercontrol examples
+# supercontroller examples
 
 These examples are functionally identical - the choice of rollup or webpack is up to the needs of your project or personal preference.
 
@@ -24,4 +24,4 @@ Then open the appropriate `index.html` file in your browser. This can be served 
 ## Scripts
 
 - `npm run build` will build the example app.
-- `npm run refresh` will rebuild supercontrol, reinstall it into a subdirectory, and rebuild the example app. This is very useful if developing locally and you want to test a live browser example.
+- `npm run refresh` will rebuild supercontroller, reinstall it into a subdirectory, and rebuild the example app. This is very useful if developing locally and you want to test a live browser example.

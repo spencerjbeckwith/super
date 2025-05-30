@@ -23,7 +23,7 @@ jobs:
         env:
           CI: true
       - run: |
-          cd supercontrol
+          cd supercontroller
           npm install
           npm run test
         env:

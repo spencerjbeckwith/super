@@ -4,11 +4,11 @@ on:
     branches:
       - main
     paths:
-      - supercontrol/**
+      - supercontroller/**
   workflow_dispatch:
 jobs:
   publish:
     uses: ./.github/workflows/publish.yml
     with:
-      package_name: supercontrol
+      package_name: supercontroller
     secrets: inherit

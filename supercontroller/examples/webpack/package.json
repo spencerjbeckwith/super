@@ -1,7 +1,7 @@
 {
-    "name": "supercontrol-example-webpack",
+    "name": "supercontroller-example-webpack",
     "version": "1.0.0",
-    "description": "Example using supercontrol with webpack",
+    "description": "Example using supercontroller with webpack",
     "scripts": {
         "build": "npx webpack",
         "refresh": "cd ../.. && npm run build && cd examples/webpack && npm install ../.. && npm run build"
@@ -15,6 +15,6 @@
         "webpack-cli": "^6.0.1"
     },
     "dependencies": {
-        "supercontrol": "file:../.."
+        "supercontroller": "file:../.."
     }
 }

@@ -1,4 +1,4 @@
-import { UnifiedInput } from "supercontrol";
+import { UnifiedInput } from "supercontroller";
 
 const i = new UnifiedInput();
 const ex = document.getElementById("example");
