@@ -1,0 +1,23 @@
+{
+  "name": "supercontrol-example-rollup",
+  "version": "1.0.0",
+  "description": "Example using supercontrol with rollup",
+  "private": true,
+  "scripts": {
+    "build": "npx rollup -c rollup.config.js",
+    "refresh": "cd ../.. && npm run build && cd examples/rollup && npm install ../.. && npm run build"
+  },
+  "author": "Spencer Beckwith",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "rollup": "^4.40.0",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "supercontrol": "file:../.."
+  }
+}

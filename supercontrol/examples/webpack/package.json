@@ -1,0 +1,20 @@
+{
+    "name": "supercontrol-example-webpack",
+    "version": "1.0.0",
+    "description": "Example using supercontrol with webpack",
+    "scripts": {
+        "build": "npx webpack",
+        "refresh": "cd ../.. && npm run build && cd examples/webpack && npm install ../.. && npm run build"
+    },
+    "author": "Spencer Beckwith",
+    "license": "MIT",
+    "devDependencies": {
+        "ts-loader": "^9.5.2",
+        "typescript": "^5.8.3",
+        "webpack": "^5.99.6",
+        "webpack-cli": "^6.0.1"
+    },
+    "dependencies": {
+        "supercontrol": "file:../.."
+    }
+}
