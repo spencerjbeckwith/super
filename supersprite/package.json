@@ -1,6 +1,6 @@
 {
   "name": "supersprite",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "sprite drawing engine for 2D games",
   "main": "dist/index.js",
   "bin": {
