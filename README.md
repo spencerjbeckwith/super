@@ -16,9 +16,9 @@ npm install supersprite supersound supercontroller
 
 ## Examples
 
-- [examples/pong](pong) demonstrates using all three packages at once
-- [examples/testing](testing) demonstrates using the packages with a testing environment
-- [supersprite/examples/rollup](supersprite example) demonstrates supersprite's graphics capabilities
+- [pong](examples/pong) demonstrates using all three packages at once
+- [testing](examples/testing) demonstrates using the packages with a testing environment
+- [supersprite example](supersprite/examples/rollup) demonstrates supersprite's graphics capabilities
 
 Note that since these packages are intended to be used in a browser, they require a tool such as [rollup](https://rollupjs.org/guide/en/) or [webpack](https://v4.webpack.js.org/). There are individual examples under each package that demonstrate using that package with either rollup or webpack.
 
