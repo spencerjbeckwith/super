@@ -14,9 +14,9 @@ export type GamepadButtons =
     "gpLeftJoystick" |
     "gpRightJoystick" |
     "gpDPadUp" |
+    "gpDPadDown" |
     "gpDPadLeft" |
     "gpDPadRight" |
-    "gpDPadDown" |
     "gpCenter" |
     "gpLeftAxisLeft" |
     "gpLeftAxisRight" |

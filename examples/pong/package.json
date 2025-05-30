@@ -1,0 +1,29 @@
+{
+  "name": "pong",
+  "version": "1.0.0",
+  "description": "example pong game built using super packages",
+  "private": true,
+  "scripts": {
+    "atlas": "npx supersprite -d assets/sprites -a assets/atlas.png -m src/sprites.json",
+    "build": "npx rollup -c rollup.config.js",
+    "serve": "npx serve"
+  },
+  "keywords": [],
+  "author": "Spencer Beckwith",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "rollup": "^4.41.1",
+    "serve": "^14.2.4",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "supercontroller": "^1.0.1",
+    "supersound": "^1.0.2",
+    "supersprite": "^3.0.3"
+  }
+}
