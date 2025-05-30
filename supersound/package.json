@@ -1,6 +1,6 @@
 {
   "name": "supersound",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "audio engine for browser games",
   "main": "dist/index.js",
   "repository": {
@@ -14,8 +14,8 @@
   },
   "homepage": "https://github.com/spencerjbeckwith/super/supersound#readme",
   "scripts": {
-    "build": "tsc",
-    "test": "cross-env TS_NODE_PROJECT=config/tsconfig.test.json mocha --config config/.mocharc.json",
+    "build": "tsc -p config/tsconfig.build.json",
+    "test": "mocha --config config/.mocharc.json",
     "coverage": "nyc npm run test"
   },
   "keywords": [
@@ -28,7 +28,6 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.14.0",
     "@types/sinon": "^17.0.4",
-    "cross-env": "^7.0.3",
     "expect": "^29.7.0",
     "global-jsdom": "^26.0.0",
     "mocha": "^11.1.0",

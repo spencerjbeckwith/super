@@ -1,6 +1,6 @@
 {
   "name": "supersprite",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "sprite drawing engine for 2D games",
   "main": "dist/index.js",
   "bin": {
@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/spencerjbeckwith/super/supersprite#readme",
   "scripts": {
-    "build": "tsc",
-    "test": "cross-env TS_NODE_PROJECT=config/tsconfig.test.json mocha --config config/.mocharc.json",
+    "build": "tsc -p config/tsconfig.build.json",
+    "test": "mocha --config config/.mocharc.json",
     "coverage": "nyc npm run test"
   },
   "keywords": [
@@ -40,7 +40,6 @@
     "@types/mocha": "^10.0.7",
     "@types/node": "^22.5.4",
     "@types/sinon": "^17.0.3",
-    "cross-env": "^7.0.3",
     "expect": "^29.7.0",
     "gifwrap": "^0.10.1",
     "global-jsdom": "^24.0.0",

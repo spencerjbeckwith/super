@@ -1,49 +1,47 @@
 {
     "name": "supercontroller",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "input engine for browser games",
     "main": "dist/index.js",
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/spencerjbeckwith/super.git"
+        "type": "git",
+        "url": "git+https://github.com/spencerjbeckwith/super.git"
     },
     "author": "Spencer Beckwith",
     "license": "MIT",
     "bugs": {
-      "url": "https://github.com/spencerjbeckwith/super/issues"
+        "url": "https://github.com/spencerjbeckwith/super/issues"
     },
     "homepage": "https://github.com/spencerjbeckwith/super/supercontroller#readme",
     "scripts": {
-      "build": "tsc",
-      "test": "cross-env TS_NODE_PROJECT=config/tsconfig.test.json mocha --config config/.mocharc.json",
-      "coverage": "nyc npm run test"
+        "build": "tsc -p config/tsconfig.build.json",
+        "test": "mocha --config config/.mocharc.json",
+        "coverage": "nyc npm run test"
     },
     "keywords": [
-      "supercontroller",
-      "control",
-      "input",
-      "game"
+        "supercontroller",
+        "control",
+        "input",
+        "game"
     ],
     "devDependencies": {
-      "@types/mocha": "^10.0.10",
-      "@types/node": "^22.14.0",
-      "@types/sinon": "^17.0.4",
-      "cross-env": "^7.0.3",
-      "expect": "^29.7.0",
-      "global-jsdom": "^26.0.0",
-      "mocha": "^11.1.0",
-      "mocha-suppress-logs": "^0.5.1",
-      "nyc": "^17.1.0",
-      "sinon": "^20.0.0",
-      "ts-node": "^10.9.2",
-      "typescript": "^5.8.3"
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^22.14.0",
+        "@types/sinon": "^17.0.4",
+        "expect": "^29.7.0",
+        "global-jsdom": "^26.0.0",
+        "mocha": "^11.1.0",
+        "mocha-suppress-logs": "^0.5.1",
+        "nyc": "^17.1.0",
+        "sinon": "^20.0.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.3"
     },
     "nyc": {
-      "exclude": [
-        "**/*.d.ts",
-        "**/*.spec.ts",
-        "config/*"
-      ]
+        "exclude": [
+            "**/*.d.ts",
+            "**/*.spec.ts",
+            "config/*"
+        ]
     }
-  }
-  
+}
