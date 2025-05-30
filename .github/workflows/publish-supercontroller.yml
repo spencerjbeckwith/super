@@ -1,4 +1,4 @@
-name: Publish supersprite to NPM
+name: Publish supercontroller to NPM
 on:
   push:
     branches:
