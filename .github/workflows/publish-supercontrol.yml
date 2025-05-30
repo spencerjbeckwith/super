@@ -1,0 +1,14 @@
+name: Publish supersprite to NPM
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - supercontrol/**
+  workflow_dispatch:
+jobs:
+  publish:
+    uses: ./.github/workflows/publish.yml
+    with:
+      package_name: supercontrol
+    secrets: inherit
