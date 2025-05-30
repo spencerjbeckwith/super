@@ -22,8 +22,8 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "supercontroller": "^1.0.1",
+    "supercontroller": "^1.0.3",
     "supersound": "^1.0.2",
-    "supersprite": "^3.0.3"
+    "supersprite": "^3.0.4"
   }
 }
