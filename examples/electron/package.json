@@ -1,0 +1,50 @@
+{
+  "name": "electron-example",
+  "version": "1.0.0",
+  "description": "example package usage in an electron app",
+  "main": "dist/main.js",
+  "private": true,
+  "scripts": {
+    "build:main": "tsc -p config/tsconfig.main.json",
+    "build:renderer": "rollup -c config/rollup.config.js",
+    "build": "concurrently 'npm run build:*'",
+    "start": "electron .",
+    "test": "cross-env TS_NODE_PROJECT=config/tsconfig.main.json npx mocha --config config/.mocharc.json",
+    "coverage": "nyc npm test"
+  },
+  "keywords": [],
+  "author": "Spencer Beckwith",
+  "license": "MIT",
+  "nyc": {
+    "exclude": [
+      "config/**/*",
+      "**/*.d.ts",
+      "**/*.spec.ts"
+    ]
+  },
+  "dependencies": {
+    "supercontroller": "^1.0.3",
+    "supersound": "^1.0.2",
+    "supersprite": "^3.0.4"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@types/mocha": "^10.0.10",
+    "@types/sinon": "^17.0.4",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^36.3.2",
+    "expect": "^30.0.0-beta.3",
+    "mocha": "^11.5.0",
+    "mocha-suppress-logs": "^0.5.1",
+    "nyc": "^17.1.0",
+    "rollup": "^4.41.1",
+    "sinon": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
