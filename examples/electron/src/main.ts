@@ -2,8 +2,8 @@ import { app, BrowserWindow, Menu, MenuItem, ipcMain } from "electron";
 import path from "path";
 import { spawnSync } from "child_process";
 
-const BASE_WIDTH = 400;
-const BASE_HEIGHT = 240;
+const BASE_WIDTH = 300;
+const BASE_HEIGHT = 200;
 let scale = 2;
 const MAX_SCALE = 4;
 

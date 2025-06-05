@@ -7,6 +7,7 @@
   "scripts": {
     "build:main": "tsc -p config/tsconfig.main.json",
     "build:renderer": "rollup -c config/rollup.config.js",
+    "build:atlas": "npx supersprite -d assets/sprites -a assets/atlas.png -m src/sprites.json",
     "build": "concurrently 'npm run build:*'",
     "start": "electron .",
     "test": "cross-env TS_NODE_PROJECT=config/tsconfig.main.json npx mocha --config config/.mocharc.json",
@@ -23,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "supercontroller": "^1.0.3",
+    "supercontroller": "file:../../supercontroller",
     "supersound": "^1.0.2",
     "supersprite": "^3.0.4"
   },
