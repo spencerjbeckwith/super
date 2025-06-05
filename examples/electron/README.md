@@ -12,3 +12,12 @@ There are three separate transilations/compilations that take place in this proj
 - Using `ts-node` to run the mocha test files in the project. Like Electron, this requires `module` to be set to "commonjs", so this can double-dip and use `config/tsconfig.main.json`.
 
 The game logic should run in the renderer process, and this is where the super packages would be used, since this is equivalent to the code running in the browser traditionally.
+
+## Scripts
+
+- `npm run build`: Runs all the build processes simultaneously.
+- `npm run start`: Opens the Electron app
+
+## IPC
+
+This example includes some sample inter-process communication: pressing F10 to scale the window up, F11 to go fullscreen and Escape to force-quit. This is to demonstrate some of the ways that IPC may be leveraged to give a more typical desktop-like experience.

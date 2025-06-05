@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "supercontroller": "file:../../supercontroller",
+    "supercontroller": "^1.0.4",
     "supersound": "^1.0.2",
     "supersprite": "^3.0.4"
   },
