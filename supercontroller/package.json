@@ -1,6 +1,6 @@
 {
     "name": "supercontroller",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "input engine for browser games",
     "main": "dist/index.js",
     "repository": {

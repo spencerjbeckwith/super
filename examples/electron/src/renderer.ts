@@ -122,7 +122,6 @@ function main() {
             fontSize: 12,
         });
 
-        core.draw.text(`Gamepad: ${input.gamepad.gamepad?.buttons[0].pressed}`, 10, 10);
         if (input.pressed.mouseLeft) {
             // Kick off the game!
             started = true;

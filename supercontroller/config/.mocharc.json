@@ -6,6 +6,7 @@
   "require": [
     "ts-node/register",
     "global-jsdom/register",
-    "mocha-suppress-logs"
+    "mocha-suppress-logs",
+    "./config/navigator.js"
   ]
 }

@@ -3,21 +3,19 @@ import { expect } from "expect";
 
 describe("GamepadInput", () => {
 
-    // Needed to simulate gamepad events in a browser
-    class GamepadEvent extends window.Event {
-        // Why extends window.Event is needed: https://github.com/jsdom/jsdom/issues/3331
-        // Because Event !== window.Event
-        gamepad: Gamepad | null;
-        constructor(eventType: "gamepadconnected" | "gamepaddisconnected", gamepad: Gamepad | null = null) {
-            super(eventType);
-            this.gamepad = gamepad;
-        }
-    }
-
     // Initializes a gamepad input and connects a virtual gamepad to it
     function initGamepad(gamepad: Partial<Gamepad>) {
         const g = new GamepadInput();
-        window.dispatchEvent(new GamepadEvent("gamepadconnected", gamepad as Gamepad));
+        if (!gamepad.buttons) {
+            // @ts-ignore
+            gamepad.buttons = makeButtonArray();
+        }
+        if (!gamepad.axes) {
+            // @ts-ignore
+            gamepad.axes = [0, 0, 0, 0, 0, 0];
+        }
+        navigator.getGamepads = () => [gamepad as Gamepad];
+        g.update();
         return g;
     }
 
@@ -33,15 +31,6 @@ describe("GamepadInput", () => {
         }
         return arr;
     }
-
-    it("is set and unset on events", () => {
-        const g = new GamepadInput();
-        expect(g.gamepad).toBeNull();
-        window.dispatchEvent(new GamepadEvent("gamepadconnected", {} as Gamepad ));
-        expect(g.gamepad).not.toBeNull();
-        window.dispatchEvent(new GamepadEvent("gamepaddisconnected"));
-        expect(g.gamepad).toBeNull();
-    });
 
     it("returns correct axis values", () => {
         const gamepad: Partial<Gamepad> = {
@@ -224,5 +213,25 @@ describe("GamepadInput", () => {
         g.update();
         expect(g.released.gpLeftTrigger).toBe(false);
         expect(g.idle.gpLeftTrigger).toBe(true);
+    });
+
+    it("polls a new gamepad object every frame", () => {
+        const g = initGamepad({});
+        // @ts-ignore
+        navigator.getGamepads = () => [{
+            axes: [0, 0, 0, 0, 0, 0],
+            buttons: makeButtonArray(),
+            funky: true,
+        } as Gamepad];
+        g.update();
+        // @ts-ignore
+        expect(g.gamepad.funky).toBe(true);
+    });
+
+    it("unsets gamepad when disconnected", () => {
+        const g = initGamepad({});
+        navigator.getGamepads = () => [null];
+        g.update();
+        expect(g.gamepad).toBe(null);
     });
 });

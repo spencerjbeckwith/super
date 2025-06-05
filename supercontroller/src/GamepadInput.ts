@@ -141,12 +141,6 @@ export class GamepadInput extends Input<GamepadButtons> {
 
         this.triggerMode = null;
         this.reset();
-        window.addEventListener("gamepadconnected", (event) => {
-            this.set(event.gamepad);
-        });
-        window.addEventListener("gamepaddisconnected", () => {
-            this.reset();
-        });
     }
 
     /** Initializes the gamepad and sets all states to idle. */
@@ -217,6 +211,23 @@ export class GamepadInput extends Input<GamepadButtons> {
     */
     update() {
         super.update(); // Default behavior will transition all our inputs from pressed -> held and from released -> idle
+
+        // Poll to see if our gamepad has changed
+        // This method proved more compatible than monitoring the events, as those returned gamepads went stale fast.
+        const newGamepad = navigator.getGamepads()[0];
+        if (!this.gamepad && newGamepad) {
+            // Gamepad connected!
+            this.set(newGamepad);
+        }
+        if (this.gamepad && newGamepad) {
+            // Ensure we are always reading the latest polled object
+            this.gamepad = newGamepad;
+        }
+        if (this.gamepad && !newGamepad) {
+            // Gamepad disconnected!
+            this.reset();
+        }
+
         if (this.gamepad) {
             for (let i = 0; i < this.inputs.length; i++) {
                 const input = this.inputs[i];
