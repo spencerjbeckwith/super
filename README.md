@@ -18,7 +18,7 @@ Documentation and usage examples are available in the README of each package. Ea
 
 ## Examples
 
-- [pong](examples/pong) demonstrates using all three packages at once
+- [pong](examples/pong) demonstrates using all three packages at once, including deployment to itch.io
 - [testing](examples/testing) demonstrates using the packages with a testing environment
 - [electron](examples/electron) demonstrates how to use the packages in an electron app for desktop distribution
 - [supersprite example](supersprite/examples/rollup) demonstrates supersprite's graphics capabilities

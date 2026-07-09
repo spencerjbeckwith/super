@@ -2,6 +2,8 @@
 
 This is an example game build using supersprite, supersound, and supercontroller.
 
+The live example may be played on [itch.io](https://mcwequiesk.itch.io/super-pong-example). See [publish-itch.yml](../../.github/workflows/publish-itch.yml) for a re-usable GitHub Action that can upload this game to itch easily, and [publish-pong.yml](../../.github/workflows/publish-pong.yml) for a working usage of the Action.
+
 To play the game:
 
 ```

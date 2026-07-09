@@ -1,0 +1,100 @@
+name: Publish to itch.io
+# Reusable workflow: builds a browser-game bundle and publishes it to itch.io
+# See publish-pong.yml for working example usage
+# uses: spencerjbeckwith/super/.github/workflows/publish-itch.yml@main
+on:
+  workflow_call:
+    inputs:
+      working_directory:
+        description: Directory that contains index.html and the build scripts.
+        required: false
+        type: string
+        default: "."
+      node_version:
+        description: Node.js version to build with.
+        required: false
+        type: string
+        default: "20"
+      build_command:
+        description: Command that produces dist/ (run in working_directory).
+        required: false
+        type: string
+        default: "npm run build"
+      include_paths:
+        description: Space-separated files/dirs (relative to working_directory) to publish.
+        required: false
+        type: string
+        default: "index.html dist assets"
+      itch_user:
+        description: itch.io username (the account that owns the game).
+        required: true
+        type: string
+      itch_game:
+        description: itch.io game slug (from the game's URL).
+        required: true
+        type: string
+      itch_channel:
+        description: itch.io channel. Use an html5 channel for browser-playable games.
+        required: false
+        type: string
+        default: "html5"
+      version:
+        description: Version reported to itch.io. Defaults to the workflow run number.
+        required: false
+        type: string
+        default: ""
+    secrets:
+      BUTLER_API_KEY:
+        description: itch.io API key (https://itch.io/user/settings/api-keys).
+        required: true
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.1
+
+      - uses: actions/setup-node@v4.0.4
+        with:
+          node-version: ${{ inputs.node_version }}
+
+      - name: Install dependencies
+        working-directory: ${{ inputs.working_directory }}
+        run: npm install
+
+      - name: Build
+        working-directory: ${{ inputs.working_directory }}
+        run: ${{ inputs.build_command }}
+
+      - name: Stage bundle
+        working-directory: ${{ inputs.working_directory }}
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/_itch_build"
+          cp -r ${{ inputs.include_paths }} "$GITHUB_WORKSPACE/_itch_build/"
+
+      - name: Create ZIP artifact
+        run: |
+          cd "$GITHUB_WORKSPACE/_itch_build"
+          zip -r "$GITHUB_WORKSPACE/${{ inputs.itch_game }}.zip" .
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          name: ${{ inputs.itch_game }}-zip
+          path: ${{ inputs.itch_game }}.zip
+
+      - name: Install butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip butler.zip
+          chmod +x butler
+          ./butler -V
+
+      - name: Push to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          VERSION="${{ inputs.version }}"
+          if [ -z "$VERSION" ]; then VERSION="${{ github.run_number }}"; fi
+          ./butler push "$GITHUB_WORKSPACE/_itch_build" \
+            "${{ inputs.itch_user }}/${{ inputs.itch_game }}:${{ inputs.itch_channel }}" \
+            --userversion "$VERSION"

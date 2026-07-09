@@ -1,0 +1,19 @@
+name: Publish pong to itch.io
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - examples/pong/**
+  workflow_dispatch:
+jobs:
+  publish:
+    uses: ./.github/workflows/publish-itch.yml
+    # ^ Outside of this repo, this needs to be spencerjbeckwith/super/.github/workflows/publish-itch.yml@main
+    with:
+      working_directory: examples/pong
+      itch_user: mcwequiesk
+      itch_game: super-pong-example
+      include_paths: "index.html dist assets"
+    secrets:
+      BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
