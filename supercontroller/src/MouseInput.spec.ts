@@ -45,6 +45,22 @@ describe("MouseInput", () => {
         expect(m.y).toBe(35);
     });
 
+    it("updates mouse X and Y position with an offset referenceFrame", () => {
+        const div = document.createElement("div");
+        document.body.appendChild(div);
+        sinon.stub(div, "getBoundingClientRect").returns({
+            left: 40,
+            top: 25,
+        } as DOMRect);
+        const m = new MouseInput({ referenceFrame: div });
+        div.dispatchEvent(new MouseEvent("mousemove", {
+            clientX: 60,
+            clientY: 55,
+        }));
+        expect(m.x).toBe(20);
+        expect(m.y).toBe(30);
+    });
+
     it("scales mouse X and Y according to referenceFrameScale", () => {
         const m = new MouseInput();
         m.referenceFrameScale.x = 2;

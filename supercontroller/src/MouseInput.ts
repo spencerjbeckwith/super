@@ -83,8 +83,9 @@ export class MouseInput extends Input<MouseButtons> {
 
         // Add listener to update our mouse position
         this.referenceFrame.addEventListener("mousemove", (event) => {
-            this.x = event.clientX / this.referenceFrameScale.x;
-            this.y = event.clientY / this.referenceFrameScale.y;
+            const rect = this.referenceFrame.getBoundingClientRect();
+            this.x = (event.clientX - rect.left) / this.referenceFrameScale.x;
+            this.y = (event.clientY - rect.top) / this.referenceFrameScale.y;
             this.deltaX = event.movementX / this.referenceFrameScale.x;
             this.deltaY = event.movementY / this.referenceFrameScale.y;
         });
