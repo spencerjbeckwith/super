@@ -145,6 +145,8 @@ export class Draw {
         this.shader.setPositions(positions);
         this.gl.uniformMatrix3fv(this.shader.uniforms.positionMatrix, false, this.projectionMatrix);
 
+        // Reset any leftover sprite transforms so primitives are in screen space
+        this.gl.uniform3f(this.shader.uniforms.transformations, 0, 0, 0);
         // Disable texture
         this.gl.disableVertexAttribArray(this.shader.attributes.texture);
         this.gl.uniform1i(this.shader.uniforms.textured, 0);
