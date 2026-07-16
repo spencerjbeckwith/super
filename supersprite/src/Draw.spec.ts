@@ -525,5 +525,27 @@ describe("Draw", () => {
             expect(spy.ctx.fillText.args[0][0]).toBe("aaaaaa");
             expect(spy.ctx.fillText.args[1][0]).toBe("b");
         });
+
+        it("measures text using the requested font", () => {
+            // Capture the font active on the context each time measureText is called,
+            // so we can confirm wrapping decisions use the requested font - not a stale one.
+            const original = spy._ctx.measureText;
+            const measuredFonts: string[] = [];
+            spy._ctx.measureText = (text: string) => {
+                measuredFonts.push(spy._ctx.font);
+                return original(text);
+            };
+            try {
+                draw.textWrap("aaa bbb", 0, 0, 2, {
+                    fontName: "Comic Sans MS",
+                    fontSize: 69,
+                });
+            } finally {
+                spy._ctx.measureText = original;
+            }
+            for (const font of measuredFonts) {
+                expect(font).toBe("69px Comic Sans MS");
+            }
+        });
     });
 });
