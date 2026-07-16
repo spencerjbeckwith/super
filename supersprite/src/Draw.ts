@@ -367,6 +367,9 @@ export class Draw {
         const lines: string[] = [];
         let position = 0, lineIndex = 0, currentLine = "";
 
+        // Font must be set here, or we risk measuring breaks off of a different font
+        this.ctx.font = `${options?.fontSize ?? this.defaults.fontSize}px ${options?.fontName ?? this.defaults.fontName}`;
+
         // Figure out the text for each line
         while (position <= text.length) {
             const char = text.charAt(position);
@@ -375,8 +378,6 @@ export class Draw {
                 lines[lineIndex] = currentLine;
                 break;
             } else {
-                // Font must be set here, or we risk measuring breaks off of a different font
-                this.ctx.font = `${options?.fontSize ?? this.defaults.fontSize}px ${options?.fontName ?? this.defaults.fontName}`;
 
                 if (this.ctx.measureText(currentLine).width >= width && char.match(options?.lineBreakCharacters ?? this.defaults.lineBreakCharacters)) {
                     // We are wide enough to break, and on a matching break character
