@@ -10,46 +10,50 @@ export interface PresenterOptions {
 
     /**
      * Canvas to use for WebGL2. If not specified, a canvas will be created and styled automatically.
-     * 
-     * If `baseWidth` and `baseHeight` are set, they will take precedence over the original size of the canvas. 
+     *
+     * If `baseWidth` and `baseHeight` are set, they will take precedence over the original size of the canvas.
      */
     glCanvas?: HTMLCanvasElement;
 
     /**
      * Canvas to use for a 2D rendering context. This context is used for rendering above the GL canvas and is not affected by global effects, making it useful for HUDs or rendering text easily.
-     * 
+     *
      * If `baseWidth` and `baseHeight` are set, they will take precedence over the original size of the canvas. This canvas will always match the size of the GL canvas.
-     * 
+     *
      * If not specified, a canvas will be created and styled automatically. If providing a canvas, ensure it is styled to remain exactly on top of the GL canvas at all times. To disable the 2D context entirely, set to null. */
     ctxCanvas?: HTMLCanvasElement | null;
 
     /**
      * How the canvases should behave when the window changes size or orientation.
-     * 
+     *
      * - `static`: No change, the canvases will always stay the same size
      * - `stretch`: The canvas will fill all available space, potentially distorting shapes.
      * - `scale`: The canvas will increase or decrease in size, while maintain its aspect ratio. This preserves shapes but may add bars on the top or sides of the view.
-     * 
+     *
      * Defaults to `scale` if not provided.
      */
     responsiveness?: Responsiveness;
 
     /**
      * If `responsiveness` is set to `scale`, this ensures that the canvases will only scale to whole numbers, preventing bizarre visual artifacts and distortions from fractional pixels.
-     * 
+     *
      * If `responsiveness` is not set to `scale`, this has no effect. Defaults to true.
      */
     scalePerfectly?: boolean;
 
-    /** Callback when the canvas is resized. Note that if `responsiveness` is set to `static` this will never be called. */
+    /**
+     * Callback when the canvas is resized.
+     * @deprecated Use Presenter.onResize() instead.
+     * */
     onResize?: ((newWidth: number, newHeight: number) => void) | undefined;
 }
 
+export type ResizeListener = (newWidth: number, newHeight: number) => void;
+
 /** Manages the HTML canvases and their rendering contexts */
 export class Presenter {
-
     /** Options used to create this Presenter, including default values */
-    options: Required<PresenterOptions>;
+    options: Omit<Required<PresenterOptions>, "onResize">;
 
     /** GL rendering context from the GL canvas */
     gl: WebGL2RenderingContext;
@@ -63,9 +67,13 @@ export class Presenter {
     /** Factor of vertical scaling currently applied to the canvases. If `responsiveness` is set to `static` this will always be 1. */
     scaleY: number;
 
+    #listeners = new Set<ResizeListener>();
+
     constructor(options: PresenterOptions) {
         if (!options.baseWidth && !options.baseHeight && !options.glCanvas) {
-            throw new PresenterError("Presenter must be initialized with either A) baseWidth and baseHeight or B) glCanvas specified.");
+            throw new PresenterError(
+                "Presenter must be initialized with either A) baseWidth and baseHeight or B) glCanvas specified.",
+            );
         }
         if (options.ctxCanvas && options.glCanvas === options.ctxCanvas) {
             throw new PresenterError("glCanvas and ctxCanvas must not be the same HTML element.");
@@ -74,11 +82,14 @@ export class Presenter {
         const baseWidth = options.baseWidth ?? options.glCanvas?.width;
         const baseHeight = options.baseHeight ?? options.glCanvas?.height;
         if (!baseWidth || !baseHeight) {
-            throw new PresenterError("Unable to determine base dimensions. Make sure either that both baseWidth and baseHeight are set, or the glCanvas is specified.");
+            throw new PresenterError(
+                "Unable to determine base dimensions. Make sure either that both baseWidth and baseHeight are set, or the glCanvas is specified.",
+            );
         }
 
         let glCanvas: HTMLCanvasElement;
-        const centerAndLayerCSS = "position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); overflow: hidden;";
+        const centerAndLayerCSS =
+            "position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); overflow: hidden;";
         if (!options.glCanvas) {
             // Create a GL canvas
             glCanvas = document.createElement("canvas");
@@ -112,7 +123,6 @@ export class Presenter {
             ctxCanvas,
             responsiveness: options.responsiveness ?? "scale",
             scalePerfectly: options.scalePerfectly ?? true,
-            onResize: options.onResize ?? (() => {}),
         };
 
         // Create our contexts
@@ -132,23 +142,26 @@ export class Presenter {
         this.gl = gl;
         this.ctx = ctx;
 
+        this.#recalculate();
         if (this.options.responsiveness !== "static") {
             window.addEventListener("resize", this.resize.bind(this));
             window.addEventListener("orientationchange", this.resize.bind(this));
-            this.resize();
+        }
+
+        if (options.onResize) {
+            this.#listeners.add(options.onResize);
         }
     }
 
-    /** Resizes the canvases according its options and the new size of the window */
-    resize() {
+    #recalculate() {
         switch (this.options.responsiveness) {
-            case ("stretch"): {
+            case "stretch": {
                 // Fill up all available space
                 this.scaleX = window.innerWidth / this.options.baseWidth;
                 this.scaleY = window.innerHeight / this.options.baseHeight;
                 break;
             }
-            case ("scale"): {
+            case "scale": {
                 // Maintain our aspect ratio
                 let scale = 1;
                 if (window.innerWidth > window.innerHeight) {
@@ -164,7 +177,8 @@ export class Presenter {
                 this.scaleY = scale;
                 break;
             }
-            default: break;
+            default:
+                break;
         }
 
         // Resize our canvases
@@ -176,9 +190,28 @@ export class Presenter {
             this.options.ctxCanvas.width = width;
             this.options.ctxCanvas.height = height;
         }
+    }
 
-        // Call our callback
-        this.options.onResize(width, height);
+    /** Resizes the canvases according its options and the new size of the window */
+    resize() {
+        this.#recalculate();
+        for (const listener of [...this.#listeners]) {
+            listener(this.currentWidth, this.currentHeight);
+        }
+    }
+
+    /**
+     * Register a new callback when the Presenter size changes or scales.
+     * Returns a function to remove the listener.
+     *
+     * The provided function is invoked immediately.
+     */
+    onResize(listener: ResizeListener): () => void {
+        this.#listeners.add(listener);
+        listener(this.currentWidth, this.currentHeight);
+        return () => {
+            this.#listeners.delete(listener);
+        };
     }
 
     /** Current width of the canvases, accounting for scaling */
@@ -193,4 +226,4 @@ export class Presenter {
 }
 
 /** Describes issues with the canvases or their rendering contexts */
-export class PresenterError extends Error {};
+export class PresenterError extends Error {}

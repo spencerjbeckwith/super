@@ -120,7 +120,7 @@ describe("Presenter", () => {
         expect(p.currentHeight).toBe(100);
     });
 
-    it("calls onResize when resized", () => {
+    it("calls a deprecated options.onResize when resized", () => {
         const fake = sinon.fake();
         const p = new Presenter({
             baseWidth: 100,
@@ -130,10 +130,37 @@ describe("Presenter", () => {
         window.innerWidth = 300;
         window.innerHeight = 300;
         p.resize();
-        expect(fake.called).toBe(true);
-        
-        // We want to check the second call, since resize() is called when the object is first created
-        expect(fake.getCalls()[1].firstArg).toBe(300);
-        expect(fake.getCalls()[1].lastArg).toBe(300);
+
+        // Only the resize triggers it — the deprecated option gets no immediate call
+        expect(fake.calledOnce).toBe(true);
+        expect(fake.firstCall.args).toEqual([300, 300]);
+    });
+
+    it("invokes a listener immediately on subscribe with current dimensions", () => {
+        window.innerWidth = 250;
+        window.innerHeight = 250;
+        const p = new Presenter({ baseWidth: 100, baseHeight: 100 });
+        const fake = sinon.fake();
+        p.onResize(fake);
+        expect(fake.calledOnce).toBe(true);
+        expect(fake.firstCall.args).toEqual([200, 200]);
+    });
+
+    it("does not invoke options.onResize during construction", () => {
+        const fake = sinon.fake();
+        new Presenter({ baseWidth: 100, baseHeight: 100, onResize: fake });
+        expect(fake.called).toBe(false);
+    });
+
+    it("removes onResize listener when invoking returned cleanup function", () => {
+        const p = new Presenter({ baseWidth: 100, baseHeight: 100 });
+        window.innerWidth = 200;
+        window.innerHeight = 200;
+        const fake = sinon.fake();
+        const cleanup = p.onResize(fake); // Calls once, automatically
+        expect(fake.calledOnce).toBe(true);
+        cleanup();
+        p.resize(); // Should not call again
+        expect(fake.calledOnce).toBe(true);
     });
 });

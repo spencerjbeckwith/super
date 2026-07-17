@@ -7,12 +7,10 @@ import { Timer } from "./util/Timer";
 import { Transform } from "./util/Transform";
 
 /** Union of values for GL texture magnification functions */
-export type GLTextureParameterMagFilter =
-    | "LINEAR"
-    | "NEAREST";
+export type GLTextureParameterMagFilter = "LINEAR" | "NEAREST";
 
 /** Union of values for GL texture minification functions */
-export type GLTextureParameterMinFilter = 
+export type GLTextureParameterMinFilter =
     | "LINEAR"
     | "NEAREST"
     | "NEAREST_MIPMAP_NEAREST"
@@ -21,10 +19,7 @@ export type GLTextureParameterMinFilter =
     | "LINEAR_MIPMAP_LINEAR";
 
 /** Union of values for GL texture wrap parameters */
-export type GLTextureParameterWrap = 
-    | "REPEAT"
-    | "CLAMP_TO_EDGE"
-    | "MIRRORED_REPEAT";
+export type GLTextureParameterWrap = "REPEAT" | "CLAMP_TO_EDGE" | "MIRRORED_REPEAT";
 
 /** Texture parameters set when initialzing a GL texture */
 export interface GLTextureParameters {
@@ -39,11 +34,11 @@ export interface GLTextureParameters {
 }
 
 export interface SuperspriteOptions {
-    /** 
+    /**
      * Options for initializing the rendering canvases. At the minimum, must have either:
      * - Both base dimensions set (`baseWidth` and `baseHeight`)
-     * - Canvas reference(s) set (`glCanvas`, and optionally, `ctxCanvas`) 
-     * 
+     * - Canvas reference(s) set (`glCanvas`, and optionally, `ctxCanvas`)
+     *
      * If one of the above is not met, this instance will throw on initialization.
      * */
     presenter: PresenterOptions;
@@ -64,7 +59,6 @@ export interface SuperspriteOptions {
 }
 
 export class Core {
-
     /** Contains all rendering methods */
     draw: Draw;
 
@@ -84,7 +78,7 @@ export class Core {
 
         /** Image containing the atlas, if it has been loaded */
         image: CanvasImageSource | null;
-    }
+    };
 
     /** The texture on which all other rendering methods draw to */
     gameTexture: WebGLTexture;
@@ -112,25 +106,23 @@ export class Core {
 
     constructor(options: SuperspriteOptions) {
         // Position matrix to place the game texture into clipspace
-        this.#positionsMatrix = [
-            2, 0, 0,
-            0, 2, 0,
-            -1, -1, 1
-        ];
+        this.#positionsMatrix = [2, 0, 0, 0, 2, 0, -1, -1, 1];
 
         // Texture matrix for the game texture is identity, because we aren't slicing or contorting it (unless UVs are manually defined)
-        this.#identityMatrix = [
-            1, 0, 0,
-            0, 1, 0,
-            0, 0, 1
-        ];
+        this.#identityMatrix = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
         // Create our child classes
         this.presenter = new Presenter(options.presenter);
         this.#projection = [
-            2 / this.presenter.options.baseWidth, 0, 0,
-            0, -2 / this.presenter.options.baseHeight, 0,
-            -1, 1, 1
+            2 / this.presenter.options.baseWidth,
+            0,
+            0,
+            0,
+            -2 / this.presenter.options.baseHeight,
+            0,
+            -1,
+            1,
+            1,
         ];
         const gl = this.presenter.gl;
         this.shader = new Shader(gl);
@@ -149,7 +141,7 @@ export class Core {
         this.atlas = {
             texture: null,
             image: null,
-        }
+        };
         if (options.atlas) {
             const tex = gl.createTexture();
             if (!tex) {
@@ -157,7 +149,7 @@ export class Core {
             }
             gl.bindTexture(gl.TEXTURE_2D, tex);
             this.#setTextureParameters(options.atlas.parameters);
-            
+
             const image = new window.Image();
             image.src = options.atlas.url;
             image.addEventListener("load", () => {
@@ -179,7 +171,17 @@ export class Core {
         }
         this.gameTexture = gameTexture;
         gl.bindTexture(gl.TEXTURE_2D, this.gameTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.presenter.options.baseWidth, this.presenter.options.baseHeight, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        gl.texImage2D(
+            gl.TEXTURE_2D,
+            0,
+            gl.RGBA,
+            this.presenter.options.baseWidth,
+            this.presenter.options.baseHeight,
+            0,
+            gl.RGBA,
+            gl.UNSIGNED_BYTE,
+            null,
+        );
         this.#setTextureParameters(options.gameTexture);
         gl.bindTexture(gl.TEXTURE_2D, null);
 
@@ -190,7 +192,13 @@ export class Core {
         }
         this.framebuffer = framebuffer;
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, gameTexture, 0);
+        gl.framebufferTexture2D(
+            gl.FRAMEBUFFER,
+            gl.COLOR_ATTACHMENT0,
+            gl.TEXTURE_2D,
+            gameTexture,
+            0,
+        );
 
         // Prepare GL to start rendering
         gl.clearColor(0, 0, 0, 1);
@@ -200,34 +208,23 @@ export class Core {
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         this.#frameBackgroundColor = new Color("#000000");
 
-        // Listen for view change events to update our projection
-        this.presenter.options.onResize = (newWidth, newHeight) => {
+        this.presenter.onResize((newWidth, newHeight) => {
             // Fix 2D context
             const ctx = this.presenter.ctx;
             if (ctx) {
                 ctx.imageSmoothingEnabled = this.draw.defaults.contextSmoothing;
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
-                ctx.scale(newWidth / this.presenter.options.baseWidth, newHeight / this.presenter.options.baseHeight);
+                ctx.scale(
+                    newWidth / this.presenter.options.baseWidth,
+                    newHeight / this.presenter.options.baseHeight,
+                );
             }
-
-            // And call onResize if it was manually defined
-            if (options.presenter.onResize) {
-                options.presenter.onResize(newWidth, newHeight);
-            }
-        };
+        });
 
         // Transformation reset: array of zeros so drawing our game texture doesn't apply anything from prior draw calls
         this.#transformationReset = [];
         while (this.#transformationReset.length < MAX_TRANSFORMATIONS * 3) {
             this.#transformationReset.push(0);
-        }
-
-        // Scale ctx correctly on init
-        const ctx = this.presenter.ctx;
-        if (ctx) {
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.scale(this.presenter.scaleX, this.presenter.scaleY);
-            ctx.imageSmoothingEnabled = this.draw.defaults.contextSmoothing;
         }
     }
 
@@ -283,7 +280,10 @@ export class Core {
         this.shader.setUVs(UVs);
 
         // Apply transformation (or a reset)
-        gl.uniform3fv(this.shader.uniforms.transformations, transform?.toArray() ?? this.#transformationReset);
+        gl.uniform3fv(
+            this.shader.uniforms.transformations,
+            transform?.toArray() ?? this.#transformationReset,
+        );
 
         // Set uniforms and render the game texture
         gl.uniformMatrix3fv(this.shader.uniforms.positionMatrix, false, this.#positionsMatrix);
@@ -291,7 +291,13 @@ export class Core {
         gl.uniform1i(this.shader.uniforms.textured, 1);
 
         // Set blend if provided
-        gl.uniform4f(this.shader.uniforms.blend, blend?.red ?? 1, blend?.green ?? 1, blend?.blue ?? 1, blend?.alpha ?? 1);
+        gl.uniform4f(
+            this.shader.uniforms.blend,
+            blend?.red ?? 1,
+            blend?.green ?? 1,
+            blend?.blue ?? 1,
+            blend?.alpha ?? 1,
+        );
 
         gl.drawArrays(gl.TRIANGLES, 0, 6);
         gl.bindTexture(gl.TEXTURE_2D, null); // Unbind the game texture or we may create a feedback loop next frame
@@ -312,4 +318,4 @@ export class Core {
 }
 
 /** Describes issues with the Core or its usage of its child classes or WebGL */
-export class CoreError extends Error {};
+export class CoreError extends Error {}

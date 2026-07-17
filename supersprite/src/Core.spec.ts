@@ -4,11 +4,11 @@ import expect from "expect";
 import { Color } from "./util/Color";
 
 describe("Core", () => {
-    
     let createTexture: sinon.SinonStub;
     let bindTexture: sinon.SinonStub;
     let createFramebuffer: sinon.SinonStub;
     let bindFramebuffer: sinon.SinonStub;
+    let ctxScale: sinon.SinonStub;
 
     before(() => {
         // Prepare our stubs
@@ -19,6 +19,8 @@ describe("Core", () => {
         createFramebuffer = sinon.stub();
         createFramebuffer.returns({});
         bindFramebuffer = sinon.stub();
+
+        ctxScale = sinon.stub();
 
         // Need to replace methods on the contexts, so intercept getContext
         // @ts-ignore
@@ -42,7 +44,8 @@ describe("Core", () => {
                 const ctx = HTMLCanvasElement.prototype.getContext(c) as any;
                 ctx.clearRect = () => {};
                 ctx.setTransform = () => {};
-                ctx.scale = () => {};
+                // Assigned the shared stub so construction-time scaling can be asserted on
+                ctx.scale = ctxScale;
                 return ctx;
             }
         });
@@ -54,7 +57,7 @@ describe("Core", () => {
                     callback();
                 }
             }
-        };
+        }
         // @ts-ignore
         window.Image = StubImage;
     });
@@ -66,6 +69,7 @@ describe("Core", () => {
         createFramebuffer.reset();
         createFramebuffer.returns({});
         bindFramebuffer.reset();
+        ctxScale.reset();
     });
 
     // Core options re-used in the tests
@@ -113,12 +117,12 @@ describe("Core", () => {
                 onResize: stub,
             },
         });
-        core.presenter.options.onResize(400, 600);
-        expect(stub.called).toBeTruthy();
-        // The function will technically be called twice by now: once on init, once on resize
-        // So assert on call no. 1 instead of no. 0
-        expect(stub.args[1][0]).toBe(400);
-        expect(stub.args[1][1]).toBe(600);
+        window.innerWidth = 400;
+        window.innerHeight = 400;
+        core.presenter.resize();
+        expect(stub.calledOnce).toBeTruthy();
+        expect(stub.args[0][0]).toBe(400);
+        expect(stub.args[0][1]).toBe(400);
     });
 
     it("throws if the atlas texture cannot be created", () => {
@@ -167,10 +171,19 @@ describe("Core", () => {
             ...opts,
             drawDefaults: {
                 matchPageToBackground: true,
-            }
+            },
         });
         core.beginRender(new Color("#ffffff")); // Color gets saved when supplied here...
         core.endRender(); // But page style isn't updated until endRender()
         expect(document.body.style.backgroundColor).toBe("rgb(255, 255, 255)"); // Unsure why JSDOM uses this instead of the hash string I gave it
+    });
+
+    it("scales ctx to the initial presenter scale on construction", () => {
+        window.innerWidth = 400;
+        window.innerHeight = 400;
+        new Core({ presenter: { baseWidth: 200, baseHeight: 200 }, atlas: null });
+        expect(ctxScale.lastCall.args[0]).toEqual(2);
+        expect(ctxScale.lastCall.args[1]).toEqual(2);
+        expect(ctxScale.callCount).toBe(1);
     });
 });
