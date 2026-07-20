@@ -5,14 +5,14 @@ supercontroller is a user-input engine for browser-based games or other applicat
 ## Capabilities
 
 - Monitor keyboard presses and releases
-- Monitor mouse position, buttons, and deltas
+- Monitor pointer (mouse, touch, and pen) position, buttons, and deltas
 - Connect a gamepad and monitor axes, buttons, and triggers
 
 ## Usage
 
 In order to use supercontroller you must also be using a tool such as [rollup](https://rollupjs.org/guide/en/) or [webpack](https://v4.webpack.js.org/) that can pull in code from node dependencies and run it in the browser. See the `examples` directory for example configurations.
 
-> ```npm install supercontroller```
+> `npm install supercontroller`
 
 The simplest way to get started is to instantiate `UnifiedInput`.
 
@@ -24,13 +24,12 @@ const input = new UnifiedInput();
 
 Options may be provided when initialization, such as keyboard keys to watch, gamepad axis/trigger thresholds, etc.
 
-Every "input" is tracked across four states: idle, pressed, held, and released. Pressed is true on the frame an input is activated, such as a keyboard button or mouse button being pressed. Held is true for every frame after that until the input is released, in which case the released state will be set to true. The next frame, idle will be true. Only one state is true at a time for each input.
+Every "input" is tracked across four states: idle, pressed, held, and released. Pressed is true on the frame an input is activated, such as a keyboard button or pointer button being pressed. Held is true for every frame after that until the input is released, in which case the released state will be set to true. The next frame, idle will be true. Only one state is true at a time for each input.
 
-States are advanced via calls to the `update()` method, which should always be at the *end* of your animation frame, after any logic.
+States are advanced via calls to the `update()` method, which should always be at the _end_ of your animation frame, after any logic.
 
 ```typescript
 function main() {
-    
     // Do logic and rendering and such...
 
     input.update();
@@ -57,11 +56,15 @@ function main() {
 }
 ```
 
-More specific details, such as mouse position or gamepad axes, can be accessed from the `mouse` or `gamepad` properties on `UnifiedInput`. Axes are read via the `gamepad.getAxis()` method.
+More specific details, such as pointer position or gamepad axes, can be accessed from the `pointer` or `gamepad` properties on `UnifiedInput`. Axes are read via the `gamepad.getAxis()` method.
 
 ```typescript
-if (input.mouse.x > 100) { /* ... */ }
-if (input.gamepad.getAxis("left", "x") < -0.5) { /* ... */ }
+if (input.pointer.x > 100) {
+    /* ... */
+}
+if (input.gamepad.getAxis("left", "x") < -0.5) {
+    /* ... */
+}
 ```
 
 ### Multiple Inputs
@@ -69,7 +72,9 @@ if (input.gamepad.getAxis("left", "x") < -0.5) { /* ... */ }
 In some cases, multiple inputs should be linked to one action. To help facilitate this, use the `anyOf()` method. This returns true if any of the provided inputs are true.
 
 ```typescript
-if (input.anyOf("held", ["keyArrowLeft", "gamepadDPadLeft", "gamepadLeftAxisLeft", "keyA"])) { /* ... */ }
+if (input.anyOf("held", ["keyArrowLeft", "gamepadDPadLeft", "gamepadLeftAxisLeft", "keyA"])) {
+    /* ... */
+}
 ```
 
 In this example, the code block will execute if any of the left arrow key, gamepad D-pad left, gamepad left axis, or A key are held to the left.
@@ -80,11 +85,11 @@ There are eight virtual gamepad buttons that supercontroller tracks - they are t
 
 These are useful for `anyOf()` as described above and for situations where checking the specific magnitude of the axis doesn't matter, such as navigating menus.
 
-#### Mouse Reference Frame
+#### Pointer Reference Frame
 
-To obtain accurate mouse data, a reference frame may be specified. Typically this would be your game's canvas element. If not specified, the document body is used instead.
+To obtain accurate pointer data, a reference frame may be specified. Typically this would be your game's canvas element. If not specified, the document body is used instead.
 
-This reference frame may also have a scale specified, which will scale up or down the mouse coordinates within the element. This is useful if the game is low-resolution and has been scaled up or down.
+This reference frame may also have a scale specified, which will scale up or down the pointer coordinates within the element. This is useful if the game is low-resolution and has been scaled up or down.
 
 #### Keyboard Selected Keys
 
@@ -96,12 +101,7 @@ To get useful intellisense/autocomplete for the new states, use `as const` on th
 
 ```typescript
 const input = new KeyboardInput({
-    keys: [
-        "keyArrowLeft",
-        "keyArrowUp",
-        "keyArrowRight",
-        "keyArrowDown",
-    ] as const,
+    keys: ["keyArrowLeft", "keyArrowUp", "keyArrowRight", "keyArrowDown"] as const,
 });
 ```
 
@@ -118,7 +118,7 @@ Trigger values in "axis" mode are treated very similarly to the regular axes. Th
 ## Limitations
 
 - Only one gamepad may be connected at a time
-- No support for touch input
+- Only one pointer event is handled at once (the primary pointer). Gestures like pinching, or multiple touches, aren't handled.
 - No support for virtual reality gamepad mappings
 - Specific gamepad layouts may not be compatible with supercontroller. This is inevitable given how many varieties and manufacturers there are and that there's no meaningful standard. There are a few options to remedy this:
     - Open a GitHub issue about the layout, ideally containing specifics about why the layout is broken and how it might be assessed by supercontroller. Even better, open a PR!

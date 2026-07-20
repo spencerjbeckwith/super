@@ -1,5 +1,5 @@
 export * from "./Input";
 export * from "./KeyboardInput";
-export * from "./MouseInput";
+export * from "./PointerInput";
 export * from "./GamepadInput";
 export * from "./UnifiedInput";

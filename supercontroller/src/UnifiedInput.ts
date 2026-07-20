@@ -1,7 +1,7 @@
 import { KeyboardInput, KeyboardInputOptions } from "./KeyboardInput";
-import { MouseInput, MouseInputOptions } from "./MouseInput";
+import { PointerInput, PointerInputOptions } from "./PointerInput";
 import { GamepadInput, GamepadInputOptions } from "./GamepadInput";
-import { keys, Keys } from "./KeyboardKeys";
+import { Keys } from "./KeyboardKeys";
 
 /** Utility type that describes the keys of each input state on UnifiedInput. */
 type InputStates<K extends readonly string[] = Keys[]> = {
@@ -13,63 +13,67 @@ type InputStates<K extends readonly string[] = Keys[]> = {
 };
 
 /**
- * Unifies KeyboardInput, MouseInput, and GamepadInput into one convenient interface.
- * 
+ * Unifies KeyboardInput, PointerInput, and GamepadInput into one convenient interface.
+ *
  * Like its comprising Inputs, the `update()` method of this class must be called every frame.
  */
 export class UnifiedInput<K extends readonly string[] = Keys[]> {
-
     /** Access point for more advanced keyboard input */
     keyboard: KeyboardInput<K>;
 
-    /** Access point for more advanced mouse input, such as checking mouse location or deltas */
-    mouse: MouseInput;
+    /** Access point for more advanced pointer (mouse, touch, and pen) input, such as checking pointer location or deltas */
+    pointer: PointerInput;
 
     /** Access point for more advanced gamepad input, such as checking triggers or gamepad connection status */
     gamepad: GamepadInput;
 
-    constructor(options?: KeyboardInputOptions<K> & MouseInputOptions & GamepadInputOptions) {
+    constructor(options?: KeyboardInputOptions<K> & PointerInputOptions & GamepadInputOptions) {
         this.keyboard = new KeyboardInput(options);
-        this.mouse = new MouseInput(options);
+        this.pointer = new PointerInput(options);
         this.gamepad = new GamepadInput(options);
     }
 
-    /** Checks the pressed state for keyboard, mouse, and gamepad input */
+    /** @deprecated Use `pointer` instead */
+    get mouse(): PointerInput {
+        return this.pointer;
+    }
+
+    /** Checks the pressed state for keyboard, pointer, and gamepad input */
     get pressed() {
         // TODO: handle mapping here
         return {
             ...this.keyboard.pressed,
-            ...this.mouse.pressed,
+            ...this.pointer.pressed,
             ...this.gamepad.pressed,
         };
     }
 
-    /** Checks the held state for keyboard, mouse, and gamepad input */
+    /** Checks the held state for keyboard, pointer, and gamepad input */
     get held() {
         // TODO: handle mapping here
         return {
             ...this.keyboard.held,
-            ...this.mouse.held,
+            ...this.pointer.held,
             ...this.gamepad.held,
         };
     }
 
-    /** Checks the released state for keyboard, mouse, and gamepad input */
+    /** Checks the released state for keyboard, pointer, and gamepad input */
     get released() {
         // TODO: handle mapping here
         return {
             ...this.keyboard.released,
-            ...this.mouse.released,
+            ...this.pointer.released,
             ...this.gamepad.released,
         };
     }
 
-    /** Checks the idle state for keyboard, mouse, and gamepad input */
+    /** Checks the idle state for keyboard, pointer, and gamepad input */
     get idle() {
         // TODO: handle mapping here
         return {
             ...this.keyboard.idle,
-            ...this.mouse.idle,
+            ...this.pointer.idle,
             ...this.gamepad.idle,
         };
     }
@@ -77,13 +81,13 @@ export class UnifiedInput<K extends readonly string[] = Keys[]> {
     /** Must be called *at the end* of every frame to update the underlying inputs */
     update() {
         this.keyboard.update();
-        this.mouse.update();
+        this.pointer.update();
         this.gamepad.update();
     }
 
     /**
      * Returns true if any listed input of the provided state is currently true.
-     * 
+     *
      * This is very useful to check multiple inputs, especially from different sources, at once without needing boolean logic.
      */
     anyOf(state: "pressed" | "held" | "released" | "idle", inputs: InputStates<K>[typeof state][]) {
@@ -97,12 +101,12 @@ export class UnifiedInput<K extends readonly string[] = Keys[]> {
 
     /**
      * Returns true if all of the listed inputs in the provided state are currently true.
-     * 
+     *
      * There are two caveats to this function:
-     * 
+     *
      * 1. Be very careful using the `pressed` or `released` states, since more than one input checked here would require a frame-perfect input,
      * which can be very difficult for a human to pull off at 60 frames per second.
-     * 
+     *
      * 2. Be careful when using multiple input sources, such as keyboard and gamepad, with this function. If a gamepad is not connected this function
      * cannot return true. Furthermore, it would be unusual for a human to be using both the gamepad and the keyboard at the same time.
      */
