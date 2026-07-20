@@ -2,6 +2,12 @@
 
 Monorepo containing game development TS/JS libraries.
 
+## Live Games
+
+See super in action:
+
+- [Mailhem](https://mcwequiesk.itch.io/mailhem)
+
 ## Packages
 
 - [supersprite](supersprite) for graphics
